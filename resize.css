@@ -6,6 +6,14 @@
     bottom: -5px;
 }
 
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 10px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+
 .ui-resizable-s {
     cursor: s-resize;
     height: 10px;
@@ -14,20 +22,28 @@
     left: 0;
 }
 
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 10px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 10px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+
 .ui-resizable-handle {
     position: absolute;
     font-size: 0.1px;
     display: block;
     -ms-touch-action: none;
     touch-action: none;
-}
-
-.ui-resizable-e {
-    cursor: e-resize;
-    width: 10px;
-    right: -5px;
-    top: 0;
-    height: 100%;
 }
 
 .ui-resizable-handle {

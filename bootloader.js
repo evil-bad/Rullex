@@ -26,3 +26,21 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         enabled = true;
     }
 });
+
+// chrome.commands.onCommand.addListener(function(command) {
+//     if (command === 'toggle') {
+//         chrome.tabs.getSelected(null, function(tab) {
+//             if (enabled) {
+//                 enabled = false;
+//                 chrome.tabs.sendRequest(tab.id, {
+//                     'action': 'switchOff'
+//                 });
+//             } else {
+//                 enabled = true;
+//                 chrome.tabs.sendRequest(tab.id, {
+//                     'action': 'switchOn'
+//                 });
+//             }
+//         });
+//     }
+// });

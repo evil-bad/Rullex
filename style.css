@@ -12,7 +12,7 @@
   position: absolute;
 }
 .chrome-ruller-overlay .wrapper:hover .line {
-  background-color: blue;
+  background-color: black;
 }
 .chrome-ruller-overlay .wrapper .ruller {
   height: 100%;
@@ -32,7 +32,7 @@
   user-select: none;
 }
 .chrome-ruller-overlay .wrapper .value.width {
-  top: -25px;
+  top: -27px;
   right: 50%;
   transform: translateX(50%);
 }
@@ -43,7 +43,8 @@
 }
 .chrome-ruller-overlay .wrapper .line {
   position: absolute;
-  background-color: white;
+  border-top: 1px dashed white;
+  border-right: 1px dashed white;
   z-index: 0;
 }
 .chrome-ruller-overlay .wrapper .line.top {

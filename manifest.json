@@ -19,5 +19,13 @@
         "scripts": ["bootloader.js"]
     },
     "devtools_page": "index.html",
-    "permissions": ["background", "tabs", "notifications", "http://*/", "https://*/"]
+    "permissions": ["background", "tabs", "notifications", "http://*/", "https://*/"],
+    "commands": {
+        "toggle": {
+            "suggested_key": {
+                "default": "Alt+Q"
+            },
+            "description": "Toggle Ruller"
+        }
+    }
 }

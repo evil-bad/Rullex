@@ -120,7 +120,7 @@
         this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.wrapper).css({ height: 2 * Global.documentHeight });
 
         this.wrapper.draggable();
-        this.wrapper.resizable();
+        this.wrapper.resizable({ handles: 'n,w,s,e,se' });
 
         this.resize();
 
