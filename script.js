@@ -1,12 +1,12 @@
-'use strict';
-
+;
 (function($) {
-
     let Global = {
         documentHeight: 0,
         documentWidth: 0,
+        html: 'html',
         body: 'body',
         window: window,
+        document: document,
         rullerList: {},
         dot: '.'
     };
@@ -31,11 +31,13 @@
         drow: 'mousemove.ruller',
         fix: 'mouseup.ruller',
         keypress: 'keypress'
-    }
+    };
 
     let count = 0;
 
     function init() {
+        Global.html = $(Global.html);
+        Global.document = $(Global.document);
         Global.body = $(Global.body);
         Global.window = $(Global.window);
         Global.documentWidth = $(document).width();
@@ -74,10 +76,10 @@
         Global.window.on(event.keypress, function(e) {
             if (e.keyCode == 17) {
                 for (const key in Global.rullerList) {
-                    if (Global.rullerList.hasOwnProperty(key)) Global.rullerList[key].remove();
+                    if (Global.rullerList.hasOwnProperty(key)) Global.rullerList[key].removeCurrent(e);
                 }
-            }
-        });
+            };
+        })
     };
 
     function removeCurrentRuller(ruller) {
@@ -88,11 +90,10 @@
         delete Global.rullerList[ruller.id];
     }
 
-
     let ChromeRuller = function(e, id) {
         this.id = id;
-        this.startX = e.clientX;
-        this.startY = e.clientY;
+        this.startX = e.clientX + this.getXCorrection();
+        this.startY = e.clientY + this.getYCorrection();
         this.endX = 0;
         this.endY = 0;
         this.forceStay = e.ctrlKey;
@@ -118,6 +119,14 @@
         Global.window.on(event.remove + Global.dot + this.id, this.removeCurrent.bind(this));
     };
 
+    ChromeRuller.prototype.getXCorrection = function() {
+        return (Global.document.width() - Global.window.width() + Global.html.scrollLeft());
+    };
+
+    ChromeRuller.prototype.getYCorrection = function() {
+        return Global.html.scrollTop();
+    };
+
     ChromeRuller.prototype.resize = function(e) {
         let self = this;
         this.wrapper.resize(e => self.setLabelValues(e));
@@ -129,8 +138,8 @@
     };
 
     ChromeRuller.prototype.drow = function(e) {
-        this.endX = e.clientX;
-        this.endY = e.clientY;
+        this.endX = e.clientX + this.getXCorrection();
+        this.endY = e.clientY + this.getYCorrection();
         let x4 = Math.max(this.startX, this.endX);
         let y3 = Math.min(this.startY, this.endY);
         let y4 = Math.max(this.startY, this.endY);
@@ -150,10 +159,13 @@
         if (!this.forceStay) removeCurrentRuller(this);
     }
 
-    ChromeRuller.prototype.removeCurrent = function(e, originalEvent) {
-        let ruller = Global.rullerList[originalEvent.target.dataset.id];
+    ChromeRuller.prototype.removeCurrent = function(e) {
+        let ruller = null;
+        if (e && e.target && e.dataset) ruller = Global.rullerList[e.target.dataset.id];
+        if (this.id !== null) ruller = this;
         if (ruller) removeCurrentRuller(ruller);
     };
 
-    $(init);
+    init();
+
 }(jQueryChromeRuller));
