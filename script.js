@@ -28,14 +28,13 @@
         remove: 'removeruller',
         drow: 'mousemove.ruller',
         fix: 'mouseup.ruller',
-        keypress: 'keypress'
+        keypress: 'keypress.ruller',
+        resize: 'resize.ruller'
     };
 
     function init() {
         count = 0;
         Global = {
-            documentHeight: $(document).height(),
-            documentWidth: $(document).width(),
             html: $('html'),
             body: $('body'),
             window: $(window),
@@ -44,8 +43,9 @@
             dot: '.'
         };
 
-        Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector }).appendTo(Global.body).css({ width: Global.documentWidth, height: Global.documentHeight });
+        Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector }).appendTo(Global.body);
 
+        setOverlaySize();
         hookMouseEvents();
         run();
         bindQuit();
@@ -71,11 +71,18 @@
 
     function run() {
         Global.window.on(event.create, (cutommEvent, originalEvent) => Global.rullerList[count] = new ChromeRuller(originalEvent, count++));
+        Global.window.on(event.resize, setOverlaySize);
+    };
+
+    function setOverlaySize() {
+        Global.documentHeight = $(document).height();
+        Global.documentWidth = $(document).width();
+        Ruller.overlay.css({ width: Global.documentWidth, height: Global.documentHeight });
     };
 
     function bindQuit() {
         Global.window.on(event.keypress, function(e) {
-            if (e.keyCode == 17) unload();
+            if (e.keyCode === 17) unload();
         });
     };
 
@@ -90,6 +97,7 @@
             Global.window.off(event.create);
             Global.window.off(event.mousedown);
             Global.window.off(event.keypress);
+            Global.window.off(event.resize);
         }
     };
 
