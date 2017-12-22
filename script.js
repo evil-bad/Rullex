@@ -1,18 +1,16 @@
 ;
 (function($) {
-    let Global = {
-        documentHeight: 0,
-        documentWidth: 0,
-        html: 'html',
-        body: 'body',
-        window: window,
-        document: document,
-        rullerList: {},
-        dot: '.'
+    let Global = {};
+    let count;
+
+    let BootLoader = {
+        switchOn: 'switchOn',
+        switchOff: 'switchOff',
+        run: 'run'
     };
 
     let Ruller = {
-        overlay: 'chrome-ruller-overlay',
+        overlaySelector: 'chrome-ruller-overlay',
         wrapper: 'wrapper',
         main: 'ruller',
         width: 'value width',
@@ -33,17 +31,20 @@
         keypress: 'keypress'
     };
 
-    let count = 0;
-
     function init() {
-        Global.html = $(Global.html);
-        Global.document = $(Global.document);
-        Global.body = $(Global.body);
-        Global.window = $(Global.window);
-        Global.documentWidth = $(document).width();
-        Global.documentHeight = $(document).height();
+        count = 0;
+        Global = {
+            documentHeight: $(document).height(),
+            documentWidth: $(document).width(),
+            html: $('html'),
+            body: $('body'),
+            window: $(window),
+            document: $(document),
+            rullerList: {},
+            dot: '.'
+        };
 
-        Ruller.overlay = $('<div/>', { class: Ruller.overlay }).appendTo(Global.body).css({ width: Global.documentWidth, height: Global.documentHeight });
+        Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector }).appendTo(Global.body).css({ width: Global.documentWidth, height: Global.documentHeight });
 
         hookMouseEvents();
         run();
@@ -52,7 +53,7 @@
 
     function hookMouseEvents() {
         Global.window.on(event.mousedown, function(e) {
-            let isRuller = ((e.target.className === Ruller.main) || (e.target.className.indexOf(Ruller.resizable) > -1));
+            let isRuller = ((e.target.className === Ruller.main) || $(e.target).parents(Global.dot + Ruller.wrapper).length);
             let isLeftButton = e.which === 1;
             let isCentralButton = e.which === 2;
 
@@ -74,21 +75,23 @@
 
     function bindQuit() {
         Global.window.on(event.keypress, function(e) {
-            if (e.keyCode == 17) {
-                for (const key in Global.rullerList) {
-                    if (Global.rullerList.hasOwnProperty(key)) Global.rullerList[key].removeCurrent(e);
-                }
-            };
-        })
+            if (e.keyCode == 17) unload();
+        });
     };
 
-    function removeCurrentRuller(ruller) {
-        Global.window.off(event.create + Global.dot + ruller.id);
-        Global.window.off(event.drow + Global.dot + ruller.id);
-        Global.window.off(event.fix + Global.dot + ruller.id);
-        ruller.wrapper.remove();
-        delete Global.rullerList[ruller.id];
-    }
+    function unload(forse) {
+        for (const key in Global.rullerList) {
+            if (Global.rullerList.hasOwnProperty(key)) Global.rullerList[key].remove();
+        }
+
+        if (forse) {
+            Global.rullerList = {};
+            Ruller.overlay.remove();
+            Global.window.off(event.create);
+            Global.window.off(event.mousedown);
+            Global.window.off(event.keypress);
+        }
+    };
 
     let ChromeRuller = function(e, id) {
         this.id = id;
@@ -116,7 +119,7 @@
         Global.window.on(event.drow + Global.dot + this.id, this.drow.bind(this));
         Global.window.on(event.fix + Global.dot + this.id, this.fix.bind(this));
         Global.window.on(event.create + Global.dot + this.id, this.checkForStay.bind(this));
-        Global.window.on(event.remove + Global.dot + this.id, this.removeCurrent.bind(this));
+        Global.window.on(event.remove + Global.dot + this.id, this.remove.bind(this));
     };
 
     ChromeRuller.prototype.getXCorrection = function() {
@@ -156,16 +159,31 @@
     };
 
     ChromeRuller.prototype.checkForStay = function() {
-        if (!this.forceStay) removeCurrentRuller(this);
-    }
-
-    ChromeRuller.prototype.removeCurrent = function(e) {
-        let ruller = null;
-        if (e && e.target && e.dataset) ruller = Global.rullerList[e.target.dataset.id];
-        if (this.id !== null) ruller = this;
-        if (ruller) removeCurrentRuller(ruller);
+        if (!this.forceStay) this.remove();
     };
 
-    init();
+    ChromeRuller.prototype.remove = function() {
+        Global.window.off(event.create + Global.dot + this.id);
+        Global.window.off(event.drow + Global.dot + this.id);
+        Global.window.off(event.fix + Global.dot + this.id);
+        Global.window.off(event.remove + Global.dot + this.id);
+        this.wrapper.remove();
+        delete Global.rullerList[this.id];
+    };
+
+    chrome.extension.onRequest.addListener(function(request) {
+        if (!request) return;
+
+        switch (request.action) {
+            case BootLoader.run:
+                return init();
+            case BootLoader.switchOn:
+                return init();
+            case BootLoader.switchOff:
+                return unload(true);
+            default:
+                return console.log(request);
+        }
+    });
 
 }(jQueryChromeRuller));
