@@ -51,15 +51,15 @@
     function hookMouseEvents() {
         Global.window.on(event.mousedown, function(e) {
             let isRuller = ((e.target.className === Ruller.main) || (e.target.className.indexOf(Ruller.resizable) > -1));
-            let isLeftBtn = e.which === 1;
-            let isRightBtn = e.which === 3;
+            let isLeftButton = e.which === 1;
+            let isCentralButton = e.which === 2;
 
             if (isRuller) {
-                if (isLeftBtn) return;
-                else if (isRightBtn) Global.window.trigger(event.delete, [e]);
+                if (isLeftButton) return;
+                else if (isCentralButton) Global.window.trigger(event.remove, [e]);
                 else return;
             } else {
-                if (isLeftBtn) Global.window.trigger(event.create, [e]);
+                if (isLeftButton) Global.window.trigger(event.create, [e]);
                 else return;
             }
         });
@@ -78,11 +78,19 @@
                 }
             }
         });
+    };
+
+    function removeCurrentRuller(ruller) {
+        Global.window.off(event.create + Global.dot + ruller.id);
+        Global.window.off(event.drow + Global.dot + ruller.id);
+        Global.window.off(event.fix + Global.dot + ruller.id);
+        ruller.wrapper.remove();
+        delete Global.rullerList[ruller.id];
     }
 
 
-    let ChromeRuller = function(e, count) {
-        this.count = count;
+    let ChromeRuller = function(e, id) {
+        this.id = id;
         this.startX = e.clientX;
         this.startY = e.clientY;
         this.endX = 0;
@@ -90,7 +98,7 @@
         this.forceStay = e.ctrlKey;
 
         this.wrapper = $('<div/>', { class: Ruller.wrapper }).appendTo(Ruller.overlay);
-        this.selection = $('<div/>', { class: Ruller.main }).appendTo(this.wrapper);
+        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id }).appendTo(this.wrapper);
         this.heightLabel = $('<span/>', { class: Ruller.height }).appendTo(this.wrapper);
         this.widthLabel = $('<span/>', { class: Ruller.width }).appendTo(this.wrapper);
 
@@ -104,17 +112,23 @@
 
         this.resize();
 
-        Global.window.on(event.drow + Global.dot + this.count, this.drow.bind(this));
-        Global.window.on(event.fix + Global.dot + this.count, this.fix.bind(this));
-        Global.window.on(event.create + Global.dot + this.count, this.checkForStay.bind(this));
+        Global.window.on(event.drow + Global.dot + this.id, this.drow.bind(this));
+        Global.window.on(event.fix + Global.dot + this.id, this.fix.bind(this));
+        Global.window.on(event.create + Global.dot + this.id, this.checkForStay.bind(this));
+        Global.window.on(event.remove + Global.dot + this.id, this.removeCurrent.bind(this));
     };
 
     ChromeRuller.prototype.resize = function(e) {
         let self = this;
-        this.wrapper.resize(e => self.drow(e, true));
+        this.wrapper.resize(e => self.setLabelValues(e));
     };
 
-    ChromeRuller.prototype.drow = function(e, resize) {
+    ChromeRuller.prototype.setLabelValues = function(e) {
+        this.heightLabel.html(this.wrapper.height());
+        this.widthLabel.html(this.wrapper.width());
+    };
+
+    ChromeRuller.prototype.drow = function(e) {
         this.endX = e.clientX;
         this.endY = e.clientY;
         let x4 = Math.max(this.startX, this.endX);
@@ -125,23 +139,20 @@
         let width = x4 - x3;
         this.heightLabel.html(height);
         this.widthLabel.html(width);
-        if (!resize) this.wrapper.css({ left: x3, top: y3, width: width, height: height });
+        this.wrapper.css({ left: x3, top: y3, width: width, height: height });
     };
 
     ChromeRuller.prototype.fix = function(e) {
-        Global.window.off(event.drow + Global.dot + this.count);
+        Global.window.off(event.drow + Global.dot + this.id);
     };
 
     ChromeRuller.prototype.checkForStay = function() {
-        if (!this.forceStay) this.remove();
+        if (!this.forceStay) removeCurrentRuller(this);
     }
 
-    ChromeRuller.prototype.remove = function() {
-        Global.window.off(event.create + Global.dot + this.count);
-        Global.window.off(event.drow + Global.dot + this.count);
-        Global.window.off(event.fix + Global.dot + this.count);
-        this.wrapper.remove();
-        delete Global.rullerList[this.count];
+    ChromeRuller.prototype.removeCurrent = function(e, originalEvent) {
+        let ruller = Global.rullerList[originalEvent.target.dataset.id];
+        if (ruller) removeCurrentRuller(ruller);
     };
 
     $(init);
