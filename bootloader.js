@@ -1,46 +1,73 @@
-let enabled = false;
-let loaded = false;
+let Rullers = {};
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-    if (!loaded) {
-        chrome.tabs.insertCSS(null, { file: "resize.css" });
-        chrome.tabs.insertCSS(null, { file: "style.css" });
-        chrome.tabs.executeScript(null, { file: "jQuery.js" });
-        chrome.tabs.executeScript(null, { file: "jQuery-ui.js" });
-        chrome.tabs.executeScript(null, { file: "script.js" }, function() {
-            loaded = true;
-            enabled = true;
-            chrome.tabs.sendRequest(tab.id, {
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tabInfo) {
+    chrome.pageAction.show(tabId);
+});
+
+chrome.tabs.onUpdated.addListener(
+    function(tabId, changeInfo, tab) {
+        if (changeInfo.status === "loading") {
+            Rullers[tab.id] = new RullerLoader(tab);
+        }
+    }
+);
+
+chrome.pageAction.onClicked.addListener(function(tab) {
+    Rullers[tab.id].run();
+});
+
+let RullerLoader = (function(tab) {
+    this.enabled = false;
+    this.loaded = false;
+    this.tab = tab;
+    this.icon = {
+        active: { "38": 'icon_a.png' },
+        inactive: { "38": 'icon.png' }
+    };
+});
+
+RullerLoader.prototype.run = function() {
+    let self = this;
+    if (!self.loaded) {
+        chrome.tabs.insertCSS(self.tab.id, { file: "resize.css" });
+        chrome.tabs.insertCSS(self.tab.id, { file: "style.css" });
+        chrome.tabs.executeScript(self.tab.id, { file: "jQuery.js" });
+        chrome.tabs.executeScript(self.tab.id, { file: "jQuery-ui.js" });
+        chrome.tabs.executeScript(self.tab.id, { file: "script.js" }, function() {
+            self.loaded = true;
+            self.enabled = true;
+            chrome.tabs.sendRequest(self.tab.id, {
                 'action': 'run'
             });
         });
-    } else if (enabled) {
-        chrome.tabs.sendRequest(tab.id, {
-            'action': 'switchOff'
+        chrome.pageAction.setIcon({ tabId: self.tab.id, path: self.icon.active });
+    } else if (self.enabled) self.disable();
+    else self.enable();
+};
+
+RullerLoader.prototype.enable = function() {
+    let self = this;
+    self.enabled = true;
+    chrome.tabs.sendRequest(self.tab.id, {
+        'action': 'switchOn'
+    });
+    chrome.pageAction.setIcon({ tabId: self.tab.id, path: self.icon.active });
+};
+
+RullerLoader.prototype.disable = function() {
+    let self = this;
+    self.enabled = false;
+    chrome.tabs.sendRequest(self.tab.id, {
+        'action': 'switchOff'
+    });
+    chrome.pageAction.setIcon({ tabId: self.tab.id, path: self.icon.inactive });
+};
+
+chrome.commands.onCommand.addListener(function(command, tab, a) {
+    if (command === 'toggle') {
+        chrome.tabs.getSelected(null, function(tab) {
+            if (tab < 0) return;
+            Rullers[tab.id].run();
         });
-        enabled = false;
-    } else {
-        chrome.tabs.sendRequest(tab.id, {
-            'action': 'switchOn'
-        });
-        enabled = true;
     }
 });
-
-// chrome.commands.onCommand.addListener(function(command) {
-//     if (command === 'toggle') {
-//         chrome.tabs.getSelected(null, function(tab) {
-//             if (enabled) {
-//                 enabled = false;
-//                 chrome.tabs.sendRequest(tab.id, {
-//                     'action': 'switchOff'
-//                 });
-//             } else {
-//                 enabled = true;
-//                 chrome.tabs.sendRequest(tab.id, {
-//                     'action': 'switchOn'
-//                 });
-//             }
-//         });
-//     }
-// });

@@ -3,12 +3,13 @@
 
     "name": "Chrom ruller extension",
     "description": "Make you measurement easy",
-    "version": "1.0",
+    "version": "0.0.6",
     "offline_enabled": true,
-    "browser_action": {
+    "page_action": {
         "default_icon": "icon.png"
     },
     "content_scripts": [{
+        "run_at": "document_start",
         "matches": [
             "<all_urls>"
         ],
@@ -19,7 +20,7 @@
         "scripts": ["bootloader.js"]
     },
     "devtools_page": "index.html",
-    "permissions": ["background", "tabs", "notifications", "http://*/", "https://*/"],
+    "permissions": ["background", "tabs", "http://*/", "https://*/", "<all_urls>"],
     "commands": {
         "toggle": {
             "suggested_key": {
