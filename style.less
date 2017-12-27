@@ -9,6 +9,15 @@
 	margin: 0;
 	padding: 0;
 
+	& *{
+		margin: 0;
+		padding: 0;
+	}
+
+	div[class^=ui-resizable]{
+		background: none;
+	}
+
 	.wrapper{
 		background-color: transparent;
 		position: absolute;
@@ -27,6 +36,7 @@
 			z-index: 1;
 			position: relative;
 			cursor: pointer;
+			border-radius: 0;
 		}
 
 		.value{
@@ -54,6 +64,7 @@
 			border-top: 1px dashed white;
 			border-right: 1px dashed white;
 			z-index: 0;
+			background-color: none;
 
 			&.top{
 				height: 1px;
