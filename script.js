@@ -1,4 +1,3 @@
-;
 (function($) {
     let Global = {};
     let count;
@@ -49,7 +48,7 @@
         hookMouseEvents();
         run();
         bindQuit();
-    };
+    }
 
     function hookMouseEvents() {
         Global.window.on(event.mousedown, function(e) {
@@ -66,25 +65,25 @@
                 else return;
             }
         });
-    };
+    }
 
 
     function run() {
         Global.window.on(event.create, (cutommEvent, originalEvent) => Global.rullerList[count] = new ChromeRuller(originalEvent, count++));
         Global.window.on(event.resize, setOverlaySize);
-    };
+    }
 
     function setOverlaySize() {
         Global.documentHeight = $(document).height();
         Global.documentWidth = $(document).width();
         Ruller.overlay.css({ width: Global.documentWidth, height: Global.documentHeight });
-    };
+    }
 
     function bindQuit() {
         Global.window.on(event.keypress, function(e) {
             if (e.keyCode === 17) unload();
         });
-    };
+    }
 
     function unload(forse) {
         for (const key in Global.rullerList) {
@@ -99,7 +98,7 @@
             Global.window.off(event.keypress);
             Global.window.off(event.resize);
         }
-    };
+    }
 
     let ChromeRuller = function(e, id) {
         this.id = id;

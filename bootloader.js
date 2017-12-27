@@ -66,7 +66,7 @@ RullerLoader.prototype.disable = function() {
 chrome.commands.onCommand.addListener(function(command, tab, a) {
     if (command === 'toggle') {
         chrome.tabs.getSelected(null, function(tab) {
-            if (tab < 0) return;
+            if (tab < 0 || !Rullers[tab.id]) return;
             Rullers[tab.id].run();
         });
     }

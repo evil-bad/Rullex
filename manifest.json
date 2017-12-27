@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
 
-    "name": "Chrom ruller extension",
-    "description": "Make you measurement easy",
-    "version": "0.0.6",
+    "name": "Chrome ruller extension",
+    "description": "Make you measurement easy. Beta version",
+    "version": "0.0.7",
     "offline_enabled": true,
     "page_action": {
         "default_icon": "icon.png"
