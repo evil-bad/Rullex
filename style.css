@@ -6,6 +6,8 @@
   overflow: hidden;
   z-index: 9999;
   direction: ltr;
+  margin: 0;
+  padding: 0;
 }
 .chrome-ruller-overlay .wrapper {
   background-color: transparent;
