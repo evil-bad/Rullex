@@ -18,7 +18,9 @@
         rightLine: 'line right',
         bottomLine: 'line bottom',
         leftLine: 'line left',
-        resizable: 'resizable'
+        resizable: 'resizable',
+        rotate: 'rotate',
+        rotateLabel: 'rotateLabel'
     };
 
     let event = {
@@ -107,12 +109,16 @@
         }
     }
 
-    function _getRotate(style, clockwise) {
+    function _getRotateObject(style, clockwise) {
         var transform = style.transform.replace(/[^-0-9]/g, '');
         if (clockwise) transform--;
         else transform++;
 
-        return 'rotate(' + transform + 'deg)';
+        return {
+            css: 'rotate(' + transform + 'deg)',
+            neg: 'rotate(' + (-transform) + 'deg)',
+            value: transform
+        }
     }
 
     let ChromeRuller = function(e, id) {
@@ -128,13 +134,16 @@
         this.heightLabel = $('<span/>', { class: Ruller.height }).appendTo(this.selection);
         this.widthLabel = $('<span/>', { class: Ruller.width }).appendTo(this.selection);
 
+        this.rotateWraper = $('<div/>', { class: Ruller.rotate }).appendTo(this.selection);
+        this.rotateLabel = $('<div/>', { class: Ruller.rotateLabel }).appendTo(this.rotateWraper);
+
         this.topLine = $('<span/>', { class: Ruller.topLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
         this.rightLine = $('<span/>', { class: Ruller.rightLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
         this.bottomLine = $('<span/>', { class: Ruller.bottomLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
         this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
 
         this.wrapper.draggable();
-        this.wrapper.resizable({ handles: 'n,w,s,e,se' });
+        this.selection.resizable({ handles: 'n,w,s,e,se' });
 
         this.resize();
 
@@ -202,8 +211,24 @@
     ChromeRuller.prototype.rotate = function(event) {
         if (event.target.dataset.id != this.id) return;
 
-        if (event.keyCode == key.left) this.selection.css('transform', _getRotate(this.selection.first()[0].style, false));
-        else if (event.keyCode == key.right) this.selection.css('transform', _getRotate(this.selection.first()[0].style, true));
+        let rotateObj = null;
+
+        if (event.keyCode == key.left) {
+            rotateObj = _getRotateObject(this.selection.first()[0].style, false);
+            this.selection.css('transform', rotateObj.css);
+        } else if (event.keyCode == key.right) {
+            rotateObj = _getRotateObject(this.selection.first()[0].style, true);
+            this.selection.css('transform', rotateObj.css);
+        }
+
+        if (rotateObj) {
+            let label = rotateObj.value % 360;
+            this.rotateLabel.html(label);
+            this.rotateLabel.css('transform', rotateObj.neg);
+
+            if (label) this.rotateLabel.show();
+            else this.rotateLabel.hide();
+        }
     }
 
     ChromeRuller.prototype.toggleFocus = function(activate) {

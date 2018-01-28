@@ -31,6 +31,12 @@
 			position: relative;
 			cursor: pointer;
 			border-radius: 0;
+			&:focus{
+				outline: none;
+				.line{
+					border-color: white;
+				}
+			}
 		}
 
 		.value{
@@ -55,8 +61,8 @@
 		
 		.line{
 			position: absolute;
-			border-top: 1px dashed white;
-			border-right: 1px dashed white;
+			border-top: 1px dashed cyan;
+			border-right: 1px dashed cyan;
 			z-index: 0;
 			background-color: none;
 
@@ -86,6 +92,20 @@
 				left: -1px;
 				top: 50%;
 				transform: translateY(-50%);
+			}
+		}
+
+		.rotate{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			color: white;
+			.rotateLabel{
+				display: none;
+				&:after{
+					content: '°';
+				}
 			}
 		}
 	}
