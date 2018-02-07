@@ -16,6 +16,11 @@
 .chrome-ruller-overlay div[class^=ui-resizable] {
   background: none;
 }
+.chrome-ruller-overlay div {
+  width: auto;
+  background-color: transparent;
+  border-radius: 0;
+}
 .chrome-ruller-overlay .wrapper {
   background-color: transparent;
   position: absolute;
@@ -24,11 +29,11 @@
   height: 100%;
   width: 100%;
   opacity: 0.5;
-  background-color: coral;
   z-index: 1;
   position: relative;
   cursor: pointer;
   border-radius: 0;
+  background-color: #dcbcc1;
 }
 .chrome-ruller-overlay .wrapper .ruller:focus {
   outline: none;
