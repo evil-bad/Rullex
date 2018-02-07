@@ -29,7 +29,6 @@ let RullerLoader = (function(tab) {
 RullerLoader.prototype.run = function() {
     let self = this;
     if (!self.loaded) {
-        chrome.tabs.insertCSS(self.tab.id, { file: "resize.css" });
         chrome.tabs.insertCSS(self.tab.id, { file: "style.css" });
         chrome.tabs.executeScript(self.tab.id, { file: "jQuery.js" });
         chrome.tabs.executeScript(self.tab.id, { file: "jQuery-ui.js" });

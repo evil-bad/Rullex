@@ -3,7 +3,7 @@
 
     "name": "Chrome ruller extension",
     "description": "Make you measurement easy. Beta version",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "offline_enabled": true,
     "page_action": {
         "default_icon": "icon.png"

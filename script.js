@@ -170,8 +170,8 @@
     };
 
     ChromeRuller.prototype.setLabelValues = function(e) {
-        this.heightLabel.html(this.wrapper.height());
-        this.widthLabel.html(this.wrapper.width());
+        this.heightLabel.html(this.selection.height());
+        this.widthLabel.html(this.selection.width());
     };
 
     ChromeRuller.prototype.drow = function(e) {
