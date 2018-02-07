@@ -18,7 +18,9 @@
         rightLine: 'line right',
         bottomLine: 'line bottom',
         leftLine: 'line left',
-        resizable: 'resizable'
+        resizable: 'resizable',
+        rotate: 'rotate',
+        rotateLabel: 'rotateLabel'
     };
 
     let event = {
@@ -28,7 +30,15 @@
         drow: 'mousemove.ruller',
         fix: 'mouseup.ruller',
         keypress: 'keypress.ruller',
-        resize: 'resize.ruller'
+        keydown: 'keydown.ruller',
+        resize: 'resize.ruller',
+        mouseenter: 'mouseenter.ruller',
+        mouseleave: 'mouseleave.ruller'
+    };
+
+    let key = {
+        right: 37,
+        left: 39
     };
 
     function init() {
@@ -67,7 +77,6 @@
         });
     }
 
-
     function run() {
         Global.window.on(event.create, (cutommEvent, originalEvent) => Global.rullerList[count] = new ChromeRuller(originalEvent, count++));
         Global.window.on(event.resize, setOverlaySize);
@@ -100,6 +109,18 @@
         }
     }
 
+    function _getRotateObject(style, clockwise) {
+        var transform = style.transform.replace(/[^-0-9]/g, '');
+        if (clockwise) transform--;
+        else transform++;
+
+        return {
+            css: 'rotate(' + transform + 'deg)',
+            neg: 'rotate(' + (-transform) + 'deg)',
+            value: transform
+        }
+    }
+
     let ChromeRuller = function(e, id) {
         this.id = id;
         this.startX = e.clientX + this.getXCorrection();
@@ -109,17 +130,20 @@
         this.forceStay = e.ctrlKey;
 
         this.wrapper = $('<div/>', { class: Ruller.wrapper }).appendTo(Ruller.overlay);
-        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id }).appendTo(this.wrapper);
-        this.heightLabel = $('<span/>', { class: Ruller.height }).appendTo(this.wrapper);
-        this.widthLabel = $('<span/>', { class: Ruller.width }).appendTo(this.wrapper);
+        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id, tabindex: 0 }).appendTo(this.wrapper);
+        this.heightLabel = $('<span/>', { class: Ruller.height }).appendTo(this.selection);
+        this.widthLabel = $('<span/>', { class: Ruller.width }).appendTo(this.selection);
 
-        this.topLine = $('<span/>', { class: Ruller.topLine }).appendTo(this.wrapper).css({ width: 2 * Global.documentWidth });
-        this.rightLine = $('<span/>', { class: Ruller.rightLine }).appendTo(this.wrapper).css({ height: 2 * Global.documentHeight });
-        this.bottomLine = $('<span/>', { class: Ruller.bottomLine }).appendTo(this.wrapper).css({ width: 2 * Global.documentWidth });
-        this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.wrapper).css({ height: 2 * Global.documentHeight });
+        this.rotateWraper = $('<div/>', { class: Ruller.rotate }).appendTo(this.selection);
+        this.rotateLabel = $('<div/>', { class: Ruller.rotateLabel }).appendTo(this.rotateWraper);
+
+        this.topLine = $('<span/>', { class: Ruller.topLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
+        this.rightLine = $('<span/>', { class: Ruller.rightLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
+        this.bottomLine = $('<span/>', { class: Ruller.bottomLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
+        this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
 
         this.wrapper.draggable();
-        this.wrapper.resizable({ handles: 'n,w,s,e,se' });
+        this.selection.resizable({ handles: 'n,w,s,e,se' });
 
         this.resize();
 
@@ -127,6 +151,9 @@
         Global.window.on(event.fix + Global.dot + this.id, this.fix.bind(this));
         Global.window.on(event.create + Global.dot + this.id, this.checkForStay.bind(this));
         Global.window.on(event.remove + Global.dot + this.id, this.remove.bind(this));
+        Global.window.on(event.keydown + Global.dot + this.id, this.rotate.bind(this));
+        this.selection.on(event.mouseenter + Global.dot + this.id, this.toggleFocus.bind(this, true));
+        this.selection.on(event.mouseleave + Global.dot + this.id, this.toggleFocus.bind(this, false));
     };
 
     ChromeRuller.prototype.getXCorrection = function() {
@@ -174,24 +201,57 @@
         Global.window.off(event.drow + Global.dot + this.id);
         Global.window.off(event.fix + Global.dot + this.id);
         Global.window.off(event.remove + Global.dot + this.id);
+        Global.window.off(event.keydown + Global.dot + this.id);
+        this.selection.off(event.mouseenter + Global.dot + this.id);
+        this.selection.off(event.mouseleave + Global.dot + this.id);
         this.wrapper.remove();
         delete Global.rullerList[this.id];
     };
 
-    chrome.extension.onRequest.addListener(function(request) {
-        if (!request) return;
+    ChromeRuller.prototype.rotate = function(event) {
+        if (event.target.dataset.id != this.id) return;
 
-        switch (request.action) {
-            case BootLoader.run:
-                return init();
-            case BootLoader.switchOn:
-                return init();
-            case BootLoader.switchOff:
-                return unload(true);
-            default:
-                return console.log(request);
+        let rotateObj = null;
+
+        if (event.keyCode == key.left) {
+            rotateObj = _getRotateObject(this.selection.first()[0].style, false);
+            this.selection.css('transform', rotateObj.css);
+        } else if (event.keyCode == key.right) {
+            rotateObj = _getRotateObject(this.selection.first()[0].style, true);
+            this.selection.css('transform', rotateObj.css);
         }
-    });
+
+        if (rotateObj) {
+            let label = rotateObj.value % 360;
+            this.rotateLabel.html(label);
+            this.rotateLabel.css('transform', rotateObj.neg);
+
+            if (label) this.rotateLabel.show();
+            else this.rotateLabel.hide();
+        }
+    }
+
+    ChromeRuller.prototype.toggleFocus = function(activate) {
+        if (activate) this.selection.focus();
+        else this.selection.blur();
+    }
+
+    if (chrome.extension) {
+        chrome.extension.onRequest.addListener(function(request) {
+            if (!request) return;
+
+            switch (request.action) {
+                case BootLoader.run:
+                    return init();
+                case BootLoader.switchOn:
+                    return init();
+                case BootLoader.switchOff:
+                    return unload(true);
+                default:
+                    return console.log(request);
+            }
+        });
+    }
 
 
 }(jQueryChromeRuller));

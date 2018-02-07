@@ -20,18 +20,21 @@
   background-color: transparent;
   position: absolute;
 }
-.chrome-ruller-overlay .wrapper:hover .line {
-  background-color: black;
-}
 .chrome-ruller-overlay .wrapper .ruller {
   height: 100%;
   width: 100%;
   opacity: 0.5;
-  background-color: lightblue;
+  background-color: coral;
   z-index: 1;
   position: relative;
   cursor: pointer;
   border-radius: 0;
+}
+.chrome-ruller-overlay .wrapper .ruller:focus {
+  outline: none;
+}
+.chrome-ruller-overlay .wrapper .ruller:focus .line {
+  border-color: white;
 }
 .chrome-ruller-overlay .wrapper .value {
   color: white;
@@ -53,8 +56,8 @@
 }
 .chrome-ruller-overlay .wrapper .line {
   position: absolute;
-  border-top: 1px dashed white;
-  border-right: 1px dashed white;
+  border-top: 1px dashed cyan;
+  border-right: 1px dashed cyan;
   z-index: 0;
   background-color: none;
 }
@@ -81,4 +84,17 @@
   left: -1px;
   top: 50%;
   transform: translateY(-50%);
+}
+.chrome-ruller-overlay .wrapper .rotate {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+.chrome-ruller-overlay .wrapper .rotate .rotateLabel {
+  display: none;
+}
+.chrome-ruller-overlay .wrapper .rotate .rotateLabel:after {
+  content: '°';
 }
