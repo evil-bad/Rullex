@@ -20,7 +20,8 @@
         leftLine: 'line left',
         resizable: 'resizable',
         rotate: 'rotate',
-        rotateLabel: 'rotateLabel'
+        rotateLabel: 'rotateLabel',
+        rotated: 'rotated'
     };
 
     let event = {
@@ -143,7 +144,7 @@
         this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
 
         this.wrapper.draggable();
-        this.selection.resizable({ handles: 'n,w,s,e,se' });
+        this.wrapper.resizable({ handles: 'n,w,s,e,se' });
 
         this.resize();
 
@@ -226,8 +227,8 @@
             this.rotateLabel.html(label);
             this.rotateLabel.css('transform', rotateObj.neg);
 
-            if (label) this.rotateLabel.show();
-            else this.rotateLabel.hide();
+            if (label) this.wrapper.addClass(Ruller.rotated);
+            else this.wrapper.removeClass(Ruller.rotated);
         }
     }
 

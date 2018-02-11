@@ -3,6 +3,12 @@
 	@minor: 0;
 	@build: 9;
 
+	@color-rotate-label: white;
+	@color-value-label: white;
+	@color-rotate-wrapper: lightgray;
+	@color-line: cyan;
+	@color-line-focus: white;
+
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -43,14 +49,14 @@
 			&:focus{
 				outline: none;
 				.line{
-					border-color: white;
+					border-color: @color-line-focus;
 				}
 			}
 			.getVersionColor();
 		}
 
 		.value{
-			color: white;
+			color: @color-value-label;
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 20px;
 			position: absolute;
@@ -71,8 +77,8 @@
 		
 		.line{
 			position: absolute;
-			border-top: 1px dashed cyan;
-			border-right: 1px dashed cyan;
+			border-top: 1px dashed @color-line;
+			border-right: 1px dashed @color-line;
 			z-index: 0;
 			background-color: none;
 
@@ -110,12 +116,19 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			color: white;
+			color: @color-rotate-label;
 			.rotateLabel{
 				display: none;
 				&:after{
 					content: '°';
 				}
+			}
+		}
+
+		&.rotated{
+			border: 1px dashed @color-rotate-wrapper;
+			.rotate .rotateLabel{
+				display: block;
 			}
 		}
 	}
