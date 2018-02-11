@@ -103,3 +103,9 @@
 .chrome-ruller-overlay .wrapper .rotate .rotateLabel:after {
   content: '°';
 }
+.chrome-ruller-overlay .wrapper.rotated {
+  border: 1px dashed lightgray;
+}
+.chrome-ruller-overlay .wrapper.rotated .rotate .rotateLabel {
+  display: block;
+}
