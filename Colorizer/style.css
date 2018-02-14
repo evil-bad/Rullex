@@ -1,6 +1,9 @@
 body {
   background: lightblue;
 }
+body .target {
+  column-count: 10;
+}
 body .target div {
   display: flex;
   height: 25px;
@@ -15,4 +18,5 @@ body .target div span {
   display: inline-block;
   height: 100%;
   width: 100px;
+  margin-right: 20px;
 }
