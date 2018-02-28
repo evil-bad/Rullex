@@ -1,0 +1,23 @@
+body {
+  background: lightblue;
+}
+body .target {
+  column-count: 10;
+}
+body .target div {
+  display: flex;
+  height: 25px;
+  margin-bottom: 10px;
+}
+body .target div label {
+  margin: 0 10px;
+  width: 50px;
+  color: white;
+}
+body .target div span {
+  display: inline-block;
+  height: 100%;
+  width: 100px;
+  margin-right: 20px;
+  opacity: 0.5;
+}

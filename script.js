@@ -21,7 +21,12 @@
         resizable: 'resizable',
         rotate: 'rotate',
         rotateLabel: 'rotateLabel',
-        rotated: 'rotated'
+        rotated: 'rotated',
+        info: 'info',
+        infoTop: 'info-top',
+        infoRight: 'info-right',
+        infoBottom: 'info-bottom',
+        infoLeft: 'info-left'
     };
 
     let event = {
@@ -32,9 +37,14 @@
         fix: 'mouseup.ruller',
         keypress: 'keypress.ruller',
         keydown: 'keydown.ruller',
+        keyup: 'keyup.ruller',
         resize: 'resize.ruller',
         mouseenter: 'mouseenter.ruller',
         mouseleave: 'mouseleave.ruller'
+    };
+
+    let state = {
+        hover: ':hover'
     };
 
     let key = {
@@ -58,7 +68,7 @@
         setOverlaySize();
         hookMouseEvents();
         run();
-        bindQuit();
+        bindUnload();
     }
 
     function hookMouseEvents() {
@@ -89,7 +99,7 @@
         Ruller.overlay.css({ width: Global.documentWidth, height: Global.documentHeight });
     }
 
-    function bindQuit() {
+    function bindUnload() {
         Global.window.on(event.keypress, function(e) {
             if (e.keyCode === 17) unload();
         });
@@ -143,6 +153,12 @@
         this.bottomLine = $('<span/>', { class: Ruller.bottomLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
         this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
 
+        this.info = $('<div/>', { class: Ruller.info }).appendTo(this.wrapper);
+        this.infoTop = $('<div/>', { class: Ruller.infoTop }).appendTo(this.info);
+        this.infoRight = $('<div/>', { class: Ruller.infoRight }).appendTo(this.info);
+        this.infoBottom = $('<div/>', { class: Ruller.infoBottom }).appendTo(this.info);
+        this.infoLeft = $('<div/>', { class: Ruller.infoLeft }).appendTo(this.info);
+
         this.wrapper.draggable();
         this.wrapper.resizable({ handles: 'n,w,s,e,se' });
 
@@ -152,7 +168,7 @@
         Global.window.on(event.fix + Global.dot + this.id, this.fix.bind(this));
         Global.window.on(event.create + Global.dot + this.id, this.checkForStay.bind(this));
         Global.window.on(event.remove + Global.dot + this.id, this.remove.bind(this));
-        Global.window.on(event.keydown + Global.dot + this.id, this.rotate.bind(this));
+        Global.window.on(event.keydown + Global.dot + this.id, this.bindPressListeners.bind(this));
         this.selection.on(event.mouseenter + Global.dot + this.id, this.toggleFocus.bind(this, true));
         this.selection.on(event.mouseleave + Global.dot + this.id, this.toggleFocus.bind(this, false));
     };
@@ -182,11 +198,11 @@
         let y3 = Math.min(this.startY, this.endY);
         let y4 = Math.max(this.startY, this.endY);
         let x3 = Math.min(this.startX, this.endX);
-        let height = y4 - y3;
-        let width = x4 - x3;
-        this.heightLabel.html(height);
-        this.widthLabel.html(width);
-        this.wrapper.css({ left: x3, top: y3, width: width, height: height });
+        this.height = y4 - y3;
+        this.width = x4 - x3;
+        this.heightLabel.html(this.height);
+        this.widthLabel.html(this.width);
+        this.wrapper.css({ left: x3, top: y3, width: this.width, height: this.height });
     };
 
     ChromeRuller.prototype.fix = function(e) {
@@ -209,6 +225,11 @@
         delete Global.rullerList[this.id];
     };
 
+    ChromeRuller.prototype.bindPressListeners = function(event) {
+        this.rotate(event);
+        this.showInfo(event);
+    }
+
     ChromeRuller.prototype.rotate = function(event) {
         if (event.target.dataset.id != this.id) return;
 
@@ -229,6 +250,37 @@
 
             if (label) this.wrapper.addClass(Ruller.rotated);
             else this.wrapper.removeClass(Ruller.rotated);
+        }
+    }
+
+    ChromeRuller.prototype.showInfo = function(e) {
+        if (e.ctrlKey && this.wrapper.is(state.hover)) {
+            this.info.show();
+            if (Global.rullerList[this.id].timeout) return;
+
+            if (!Global.rullerList[this.id].ctrlPressed) {
+                Global.rullerList[this.id].ctrlPressed = true;
+                Global.window.off(event.keyup + Global.dot + this.id).on(event.keyup + Global.dot + this.id, (e) => {
+                    if (!Global.rullerList[this.id]) return;
+
+                    Global.rullerList[this.id].ctrlPressed = false;
+                    this.info.hide();
+                });
+            }
+
+
+            let offset = this.wrapper.offset();
+            this.infoTop.html(offset.top);
+            this.infoRight.html(window.innerWidth - offset.left - this.width);
+            this.infoBottom.html(window.innerHeight - offset.top - this.height);
+            this.infoLeft.html(offset.left);
+
+            Global.rullerList[this.id].timeout = setTimeout(() => {
+                if (!Global.rullerList[this.id]) return;
+
+                clearTimeout(Global.rullerList[this.id].timeout);
+                Global.rullerList[this.id].timeout = 0;
+            }, 100);
         }
     }
 

@@ -1,7 +1,7 @@
 .chrome-ruller-overlay{
-	@major: 0;
+	@major: 1;
 	@minor: 0;
-	@build: 9;
+	@build: 7;
 
 	@color-rotate-label: white;
 	@color-value-label: white;
@@ -125,6 +125,38 @@
 			}
 		}
 
+		.info{
+			@margin: 10px;
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			min-width: 120px;
+			min-height: 80px;
+			text-shadow: 0 0 10px white;
+			& > div{
+				user-select: none;
+				position: absolute;
+			}
+			.info-left{
+				left: @margin;
+			}
+			.info-top{
+				top: @margin;
+				width: 100%;
+				text-align: center;
+			}
+			.info-right{
+				right: @margin;
+			}
+			.info-bottom{
+				bottom: @margin;
+				width: 100%;
+				text-align: center;
+			}
+		}
+
 		&.rotated{
 			border: 1px dashed @color-rotate-wrapper;
 			.rotate .rotateLabel{
@@ -134,14 +166,14 @@
 	}
 
 	.getVersionColor(){
-		@buildDif: 33;
-		@minDif: 11;
-		@majDiff: 40;
+		@buildDif: 9;
+		@minDif: 7;
+		@majDiff: 3;
 
-		@r: `((((@{build} + 1) * @{buildDif}) % 340) + 20)`;
-		@g: percentage(`((((@{minor} + 1) * @{minDif}) % 80) + 20) / 100`);
-		@b: percentage(`((((@{major} + 1) * @{majDiff}) % 60) + 40) / 100`);
+		@h: `((((@{build} + 1) * @{buildDif}) % 360))`;
+		@s: percentage(`((((@{minor} + 1) * @{minDif}) % 50) + 50) / 100`);
+		@l: percentage(`((((@{major} + 1) * @{majDiff}) % 40) + 40) / 100`);
 
-		background-color: hsl(@r, @g, @b);
+		background-color: hsl(@h, @s, @l);
 	}
 }
