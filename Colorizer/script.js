@@ -1,9 +1,9 @@
 ;
 (function($) {
 
-    let buildDif = 2;
-    let minDif = 3;
-    let majDiff = 10;
+    let buildDif = 9;
+    let minDif = 7;
+    let majDiff = 3;
 
 
     let target = ".target";
@@ -12,13 +12,6 @@
 
     function init() {
         target = $(target);
-
-        // build - hue
-        // minor - saturation
-        // major - light
-
-        //hsl hue, saturation, light
-        //    0-360  70-100  60-85
 
         colors = [];
 
@@ -63,8 +56,8 @@
     function getVersionColor(build, minor, major) {
 
         let h = (((build + 1) * buildDif) % 100) / 100;
-        let s = ((((minor + 1) * minDif) % 70) + 30) / 100;
-        let l = ((((major + 1) * majDiff) % 60) + 40) / 100;
+        let s = ((((minor + 1) * minDif) % 50) + 50) / 100;
+        let l = ((((major + 1) * majDiff) % 40) + 40) / 100;
 
         return hslToRgb(h, s, l);
     }
