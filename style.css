@@ -33,7 +33,7 @@
   position: relative;
   cursor: pointer;
   border-radius: 0;
-  background-color: #9db832;
+  background-color: #75b832;
 }
 .chrome-ruller-overlay .wrapper .ruller:focus {
   outline: none;

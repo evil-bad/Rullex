@@ -1,9 +1,10 @@
 {
     "manifest_version": 2,
 
-    "name": "Chrome ruller extension",
-    "description": "Make you measurement easy. Beta version",
-    "version": "1.0.7",
+    "name": "Ruler Measurement",
+    "short_name": "Chrullex",
+    "description": "Make you measurement easy with chrome ruler(ruller) extension",
+    "version": "1.0.9",
     "offline_enabled": true,
     "page_action": {
         "default_icon": "icon.png"
