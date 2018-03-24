@@ -4,24 +4,24 @@
     "name": "Ruler Measurement",
     "short_name": "Chrullex",
     "description": "Make you measurement easy with chrome ruler(ruller) extension",
-    "version": "1.0.9",
+    "version": "2.0.0",
     "offline_enabled": true,
+    "options_page": "options/options.html",
     "page_action": {
-        "default_icon": "icon.png"
+        "default_icon": "images/icon.png"
     },
     "content_scripts": [{
         "run_at": "document_start",
         "matches": [
             "<all_urls>"
         ],
-        "css": ["resize.css", "style.css"],
-        "scripts": ["jQuery.js", "Jquery-ui.js"]
+        "css": ["app/resize.css", "app/style.css"],
+        "scripts": ["jQuery/jQuery.js", "jQuery/Jquery-ui.js"]
     }],
     "background": {
-        "scripts": ["bootloader.js"]
+        "scripts": ["app/bootloader.js"]
     },
-    "devtools_page": "index.html",
-    "permissions": ["background", "tabs", "http://*/", "https://*/", "<all_urls>"],
+    "permissions": ["background", "tabs", "<all_urls>", "storage"],
     "commands": {
         "toggle": {
             "suggested_key": {
