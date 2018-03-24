@@ -21,18 +21,18 @@ let RullerLoader = (function(tab) {
     this.loaded = false;
     this.tab = tab;
     this.icon = {
-        active: { "38": 'icon_a.png' },
-        inactive: { "38": 'icon.png' }
+        active: { "38": 'images/icon_a.png' },
+        inactive: { "38": 'images/icon.png' }
     };
 });
 
 RullerLoader.prototype.run = function() {
     let self = this;
     if (!self.loaded) {
-        chrome.tabs.insertCSS(self.tab.id, { file: "style.css" });
-        chrome.tabs.executeScript(self.tab.id, { file: "jQuery.js" });
-        chrome.tabs.executeScript(self.tab.id, { file: "jQuery-ui.js" });
-        chrome.tabs.executeScript(self.tab.id, { file: "script.js" }, function() {
+        chrome.tabs.insertCSS(self.tab.id, { file: "/app/style.css" });
+        chrome.tabs.executeScript(self.tab.id, { file: "/jQuery/jQuery.js" });
+        chrome.tabs.executeScript(self.tab.id, { file: "/jQuery/jQuery-ui.js" });
+        chrome.tabs.executeScript(self.tab.id, { file: "/app/script.js" }, function() {
             self.loaded = true;
             self.enabled = true;
             chrome.tabs.sendRequest(self.tab.id, {
