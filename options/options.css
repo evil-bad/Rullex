@@ -3,7 +3,7 @@ body {
 }
 body section {
   text-align: center;
-  font-size: 2vw;
+  font-size: calc(2vw + 10px);
   color: white;
 }
 body section label {
@@ -12,7 +12,15 @@ body section label {
   cursor: pointer;
 }
 body section label span {
-  text-shadow: 0 0px 20px white;
+  text-shadow: 0 0px 15px white;
+  transition: text-shadow 0.1s linear;
+}
+body section label:hover span {
+  text-shadow: 0 0px 35px white;
+}
+body section label:hover input[type=number] {
+  background: lightblue;
+  color: white;
 }
 body section input {
   outline: none !important;
@@ -21,19 +29,42 @@ body section input[type=color] {
   display: none;
 }
 body section input[type=number] {
-  width: 4vw;
+  transition: all 50ms ease-in-out;
+  width: calc(1.9vw + 10px);
   height: auto;
-  font-size: 1.5vw;
-  min-width: 25px;
+  font-size: calc(1.5vw + 10px);
   border-radius: 0.5vw;
+  padding: 0.1vw 0.2vw;
+}
+body section input[type=number]::-webkit-outer-spin-button,
+body section input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 body section #save {
   border-radius: 0.5vw;
   padding: 0.5vw 2vw;
-  font-size: 2vw;
+  font-size: calc(2vw + 10px);
   background: darkblue;
   color: white;
   margin: 4vw 0;
   cursor: pointer;
   box-shadow: 0 0 15px white;
+  transition: box-shadow 50ms ease-in-out;
+}
+body section #save:hover {
+  background-image: -webkit-gradient(linear, right top, left bottom, color-stop(40%, darkblue), color-stop(50%, white), color-stop(60%, darkblue));
+  background-size: 250% 100%;
+  animation-name: backgroundslide;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  box-shadow: 0 0 35px white;
+}
+@keyframes backgroundslide {
+  from {
+    background-position: top right;
+  }
+  to {
+    background-position: bottom left;
+  }
 }

@@ -33,7 +33,7 @@
   position: relative;
   cursor: pointer;
   border-radius: 0;
-  background-color: #c44b36;
+  background: #c5f78c;
 }
 .chrome-ruller-overlay .wrapper .ruller:focus {
   outline: none;
@@ -61,8 +61,8 @@
 }
 .chrome-ruller-overlay .wrapper .line {
   position: absolute;
-  border-top: 1px dashed cyan;
-  border-right: 1px dashed cyan;
+  border-top: 1px dashed #00ffff;
+  border-right: 1px dashed #00ffff;
   z-index: 0;
   background-color: none;
 }
@@ -96,6 +96,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
+  font-size: 20px;
 }
 .chrome-ruller-overlay .wrapper .rotate .rotateLabel {
   display: none;
@@ -112,6 +113,7 @@
   min-width: 120px;
   min-height: 80px;
   text-shadow: 0 0 10px white;
+  font-size: 16px;
 }
 .chrome-ruller-overlay .wrapper .info > div {
   user-select: none;
@@ -134,7 +136,7 @@
   text-align: center;
 }
 .chrome-ruller-overlay .wrapper.rotated {
-  border: 1px dashed lightgray;
+  border: 1px dashed white;
 }
 .chrome-ruller-overlay .wrapper.rotated .rotate .rotateLabel {
   display: block;

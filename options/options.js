@@ -1,20 +1,26 @@
-var Option = {};
+let Option = {};
 
-var OptionTarget = {
+let OptionTarget = {
     colorSelection: '',
     colorGridLine: '',
     colorGridLineActive: '',
     colorUnit: '',
     colorDistance: '',
     colorFantomResize: '',
-    sizeUnit: '',
-    sizeDistance: ''
+    sizeUnit: { min: 1, max: 99 },
+    sizeDistance: { min: 1, max: 99 }
 };
 
 function getOption() {
     for (const input in OptionTarget) {
         if (OptionTarget.hasOwnProperty(input)) {
-            Option[input] = document.getElementById(input).value;
+            let value = document.getElementById(input).value;
+            if (OptionTarget[input].min)
+                value = value < OptionTarget[input].min ? OptionTarget[input].min : value;
+            if (OptionTarget[input].max)
+                value = value < OptionTarget[input].max ? OptionTarget[input].max : value;
+
+            Option[input] = value;
         }
     }
 }
@@ -43,7 +49,7 @@ function restore_options() {
 }
 
 function color_change(id, value) {
-    var input = this;
+    let input = this;
     if (typeof(id) === 'string') input = document.getElementById(id);
     input.previousElementSibling.style.color = value || this.value;
 }

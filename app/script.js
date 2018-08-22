@@ -52,6 +52,10 @@
         left: 39
     };
 
+    let options = {
+
+    };
+
     function init() {
         count = 0;
         Global = {
@@ -62,6 +66,10 @@
             rullerList: {},
             dot: '.'
         };
+
+        ChromeStorage.restore(function(option) {
+            options = option || {};
+        });
 
         Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector }).appendTo(Global.body);
 
@@ -140,24 +148,24 @@
         this.endY = 0;
         this.forceStay = e.ctrlKey;
 
-        this.wrapper = $('<div/>', { class: Ruller.wrapper }).appendTo(Ruller.overlay);
-        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id, tabindex: 0 }).appendTo(this.wrapper);
-        this.heightLabel = $('<span/>', { class: Ruller.height }).appendTo(this.selection);
-        this.widthLabel = $('<span/>', { class: Ruller.width }).appendTo(this.selection);
+        this.wrapper = $('<div/>', { class: Ruller.wrapper, css: { 'border-color': options.colorFantomResize } }).appendTo(Ruller.overlay);
+        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id, tabindex: 0, css: { background: options.colorSelection } }).appendTo(this.wrapper);
+        this.heightLabel = $('<span/>', { class: Ruller.height, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.selection);
+        this.widthLabel = $('<span/>', { class: Ruller.width, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.selection);
 
         this.rotateWraper = $('<div/>', { class: Ruller.rotate }).appendTo(this.selection);
-        this.rotateLabel = $('<div/>', { class: Ruller.rotateLabel }).appendTo(this.rotateWraper);
+        this.rotateLabel = $('<div/>', { class: Ruller.rotateLabel, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.rotateWraper);
 
-        this.topLine = $('<span/>', { class: Ruller.topLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
-        this.rightLine = $('<span/>', { class: Ruller.rightLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
-        this.bottomLine = $('<span/>', { class: Ruller.bottomLine }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
-        this.leftLine = $('<span/>', { class: Ruller.leftLine }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
+        this.topLine = $('<span/>', { class: Ruller.topLine, css: { 'border-color': options.colorGridLine } }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
+        this.rightLine = $('<span/>', { class: Ruller.rightLine, css: { 'border-color': options.colorGridLine } }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
+        this.bottomLine = $('<span/>', { class: Ruller.bottomLine, css: { 'border-color': options.colorGridLine } }).appendTo(this.selection).css({ width: 2 * Global.documentWidth });
+        this.leftLine = $('<span/>', { class: Ruller.leftLine, css: { 'border-color': options.colorGridLine } }).appendTo(this.selection).css({ height: 2 * Global.documentHeight });
 
-        this.info = $('<div/>', { class: Ruller.info }).appendTo(this.wrapper);
-        this.infoTop = $('<div/>', { class: Ruller.infoTop }).appendTo(this.info);
-        this.infoRight = $('<div/>', { class: Ruller.infoRight }).appendTo(this.info);
-        this.infoBottom = $('<div/>', { class: Ruller.infoBottom }).appendTo(this.info);
-        this.infoLeft = $('<div/>', { class: Ruller.infoLeft }).appendTo(this.info);
+        this.info = $('<div/>', { class: Ruller.info, css: { 'font-size': options.sizeDistance + 'px' } }).appendTo(this.wrapper);
+        this.infoTop = $('<div/>', { class: Ruller.infoTop, css: { color: options.colorDistance } }).appendTo(this.info);
+        this.infoRight = $('<div/>', { class: Ruller.infoRight, css: { color: options.colorDistance } }).appendTo(this.info);
+        this.infoBottom = $('<div/>', { class: Ruller.infoBottom, css: { color: options.colorDistance } }).appendTo(this.info);
+        this.infoLeft = $('<div/>', { class: Ruller.infoLeft, css: { color: options.colorDistance } }).appendTo(this.info);
 
         this.wrapper.draggable();
         this.wrapper.resizable({ handles: 'n,w,s,e,se' });
@@ -285,8 +293,19 @@
     }
 
     ChromeRuller.prototype.toggleFocus = function(activate) {
-        if (activate) this.selection.focus();
-        else this.selection.blur();
+        if (activate) {
+            this.selection.focus();
+            this.topLine.css('border-color', options.colorGridLineActive);
+            this.rightLine.css('border-color', options.colorGridLineActive);
+            this.bottomLine.css('border-color', options.colorGridLineActive);
+            this.leftLine.css('border-color', options.colorGridLineActive);
+        } else {
+            this.selection.blur();
+            this.topLine.css('border-color', options.colorGridLine);
+            this.rightLine.css('border-color', options.colorGridLine);
+            this.bottomLine.css('border-color', options.colorGridLine);
+            this.leftLine.css('border-color', options.colorGridLine);
+        }
     }
 
     if (chrome.extension) {

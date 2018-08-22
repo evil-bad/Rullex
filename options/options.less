@@ -1,17 +1,35 @@
 body{
-	background: darkslateblue;
+	@background: darkslateblue;
+	@text: white;
+	@input-number-back: lightblue;
+	@save-back :darkblue;
+	@font-size-min: 10px;
+	@font-size-main: ~"calc(2vw + @{font-size-min})";
+	@font-size-number: ~"calc(1.5vw + @{font-size-min})";
+
+	background: @background;
 
 	section{
 		text-align: center;
-		font-size: 2vw;
-		color: white;
+		font-size: @font-size-main;
+		color: @text;
 
 		label{
 			margin: 1vw;
 			display: block;
 			cursor: pointer;
 			span{
-				text-shadow: 0 0px 20px white;
+				text-shadow: 0 0px 15px @text;
+				transition: text-shadow 0.1s linear;
+			}
+			&:hover{
+				span{
+					text-shadow: 0 0px 35px @text;
+				}
+				input[type=number]{
+					background: @input-number-back;
+					color: @text;
+				}
 			}
 		}
 
@@ -23,22 +41,50 @@ body{
 			display: none;
 		}
 		input[type=number]{
-			width: 4vw;
+			transition: all 50ms ease-in-out;
+			width: ~"calc(1.9vw + @{font-size-min})";
 			height: auto;
-			font-size: 1.5vw;
-			min-width: 25px;
+			font-size: @font-size-number;
 			border-radius: 0.5vw;
+			padding: 0.1vw 0.2vw;
+			&::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+			    -webkit-appearance: none;
+    			margin: 0; 
+			}
 		}
 
 		#save{
 			border-radius: 0.5vw;
 			padding: 0.5vw 2vw;
-			font-size: 2vw;
-			background: darkblue;
-			color: white;
+			font-size: @font-size-main;
+			background: @save-back;
+			color: @text;
 			margin: 4vw 0;
 			cursor: pointer;
-			box-shadow: 0 0 15px white;
+			box-shadow: 0 0 15px @text;
+			transition: box-shadow 50ms ease-in-out;
+			&:hover{
+				.animate-back(@save-back, @text);
+				box-shadow: 0 0 35px @text;
+			}
 		}
 	}
+}
+
+.animate-back(@color-gradient-back, @color-gradient-front){
+	background-image: -webkit-gradient(linear, right top, left bottom, color-stop(40%,@color-gradient-back), color-stop(50%, @color-gradient-front),color-stop(60%,@color-gradient-back));
+    background-size: 250% 100%;
+    animation-name: backgroundslide;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+
+    @keyframes backgroundslide {
+        from {
+            background-position: top right;
+        }
+
+        to {
+            background-position: bottom left;
+        }
+    }
 }

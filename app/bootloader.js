@@ -32,6 +32,7 @@ RullerLoader.prototype.run = function() {
         chrome.tabs.insertCSS(self.tab.id, { file: "/app/style.css" });
         chrome.tabs.executeScript(self.tab.id, { file: "/jQuery/jQuery.js" });
         chrome.tabs.executeScript(self.tab.id, { file: "/jQuery/jQuery-ui.js" });
+        chrome.tabs.executeScript(self.tab.id, { file: "/utils/chrome-storage.js" });
         chrome.tabs.executeScript(self.tab.id, { file: "/app/script.js" }, function() {
             self.loaded = true;
             self.enabled = true;

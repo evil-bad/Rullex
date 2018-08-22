@@ -4,7 +4,7 @@
     "name": "Ruler Measurement",
     "short_name": "Chrullex",
     "description": "Make you measurement easy with chrome ruler(ruller) extension",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "offline_enabled": true,
     "options_page": "options/options.html",
     "page_action": {
