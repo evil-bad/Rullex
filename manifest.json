@@ -3,8 +3,8 @@
 
     "name": "Ruler Measurement",
     "short_name": "Chrullex",
-    "description": "Make you measurement easy with chrome ruler(ruller) extension",
-    "version": "2.0.1",
+    "description": "Make you measurement easy with Chrullex (CH-rome RUL-er EX-tension)",
+    "version": "2.2.0",
     "offline_enabled": true,
     "options_page": "options/options.html",
     "page_action": {
@@ -21,13 +21,13 @@
     "background": {
         "scripts": ["app/bootloader.js"]
     },
-    "permissions": ["background", "tabs", "<all_urls>", "storage"],
+    "permissions": ["<all_urls>", "storage"],
     "commands": {
         "toggle": {
             "suggested_key": {
                 "default": "Alt+Q"
             },
-            "description": "Toggle Ruller"
+            "description": "Toggle Ruler"
         }
     }
 }

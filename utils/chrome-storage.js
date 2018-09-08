@@ -1,18 +1,35 @@
 var ChromeStorage = {
-    restore: function(cb) {
-        chrome.storage.sync.get(['CROption'], function(items) {
-            cb(items.CROption);
+    restore: (cb) => {
+        chrome.storage.sync.get(['CROption'], (items) => {
+            if (items && items.theme === 'custom')
+                cb(item.CROption.custom);
+            else
+                cb(items.CROption);
         });
     },
 
-    save: function(option, cb) {
+    save: (option, cb) => {
         chrome.storage.sync.set({
             CROption: option
         }, function() {
             if (cb) cb();
         });
     },
-    remove: function() {
+
+    saveVersion: (version) => {
+        chrome.storage.sync.set({
+            CRVersion: version
+        });
+    },
+
+    getVersion: (cb) => {
+        chrome.storage.sync.get(['CRVersion'], (version) => {
+            cb(version.CRVersion);
+        });
+    },
+
+    remove: () => {
         chrome.storage.sync.remove('CROption');
+        chrome.storage.sync.remove('CRVersion');
     }
 };
