@@ -3,15 +3,18 @@ body {
 }
 body section {
   text-align: center;
-  font-size: calc(2vw + 10px);
+  font-size: calc(1.5vw + 10px);
   color: white;
+  user-select: none;
 }
 body section label {
-  margin: 1vw;
-  display: block;
   cursor: pointer;
+  margin-bottom: 0.5vw;
+  display: inline-block;
+  user-select: none;
 }
-body section label span {
+body section label span,
+body section label input[type=text] {
   text-shadow: 0 0px 15px white;
   transition: text-shadow 0.1s linear;
 }
@@ -41,13 +44,76 @@ body section input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+body section input[type=checkbox] {
+  height: calc(1.9vw + 10px);
+  width: calc(1.9vw + 10px);
+  vertical-align: bottom;
+}
+body section input[type=text] {
+  background: darkslateblue;
+  color: white;
+  font-size: calc(1.5vw + 10px);
+  text-align: center;
+}
+body section dropdown-container {
+  display: inline-block;
+  margin-top: 0.5vw;
+}
+body section dropdown-container dropdown-wrapper {
+  position: relative;
+}
+body section dropdown-container dropdown-wrapper input,
+body section dropdown-container dropdown-wrapper li {
+  border: 1px solid white;
+  padding: 0.5vw 1vw;
+  border-radius: 10px;
+  width: 20vw;
+  min-width: 200px;
+  max-width: 500px;
+  display: inline-block;
+}
+body section dropdown-container dropdown-wrapper ul {
+  position: absolute;
+  background: darkslateblue;
+  border: 1px solid;
+  border-radius: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  right: 0;
+  top: -1vw;
+  transform: translateY(0);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, top 0.1s ease-in-out, max-height 0.2s ease-in-out;
+  max-height: 6vw;
+  overflow: hidden;
+  opacity: 0;
+}
+body section dropdown-container dropdown-wrapper ul.opened {
+  top: calc(-50% + 4.5vw);
+  transform: translateY(-50%);
+  max-height: 65vw;
+  transition: transform 0.1s ease-in-out, top 0.1s ease-in-out, max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+body section dropdown-container dropdown-wrapper ul.opened li {
+  text-shadow: 0 0px 15px white;
+  transition: text-shadow 0.1s linear;
+  color: white;
+}
+body section dropdown-container dropdown-wrapper ul li {
+  border: none;
+  color: darkslateblue;
+}
+body section dropdown-container dropdown-wrapper ul li:hover {
+  text-shadow: 0 0px 35px white;
+}
 body section #save {
   border-radius: 0.5vw;
   padding: 0.5vw 2vw;
-  font-size: calc(2vw + 10px);
+  font-size: calc(1.5vw + 10px);
   background: darkblue;
   color: white;
-  margin: 4vw 0;
+  margin: 3vw 0 1vw;
   cursor: pointer;
   box-shadow: 0 0 15px white;
   transition: box-shadow 50ms ease-in-out;

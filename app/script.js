@@ -12,6 +12,7 @@
         overlaySelector: 'chrome-ruller-overlay',
         wrapper: 'wrapper',
         main: 'ruller',
+        selection: 'selection',
         width: 'value width',
         height: 'value height',
         topLine: 'line top',
@@ -26,7 +27,8 @@
         infoTop: 'info-top',
         infoRight: 'info-right',
         infoBottom: 'info-bottom',
-        infoLeft: 'info-left'
+        infoLeft: 'info-left',
+        floatMenu: 'menu'
     };
 
     let event = {
@@ -52,9 +54,7 @@
         left: 39
     };
 
-    let options = {
-
-    };
+    let options = {};
 
     function init() {
         count = 0;
@@ -69,14 +69,41 @@
 
         ChromeStorage.restore(function(option) {
             options = option || {};
+
+            Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector, css: { backgroundColor: 'rgba(0,0,0,' + options.opacityOverlay / 100 + ')' } }).appendTo(Global.body);
+
+            setOverlaySize();
+            hookMouseEvents();
+            run();
+            bindUnload();
+            showUpdateMessage();
         });
+    }
 
-        Ruller.overlay = $('<div/>', { class: Ruller.overlaySelector }).appendTo(Global.body);
+    function showUpdateMessage() {
+        var manifestData = chrome.runtime.getManifest();
+        ChromeStorage.getVersion((version) => {
+            if (!version || version < manifestData.version) {
+                ChromeStorage.saveVersion(manifestData.version);
+                var updateMessage = $('<div/>', {
+                    css: {
+                        position: 'fixed',
+                        top: '50px',
+                        left: '50px',
+                        color: 'darkslateblue',
+                        fontSize: 'calc(0.5vw + 10px)',
+                        background: 'lightskyblue',
+                        borderRadius: '10px',
+                        padding: '1vw'
+                    },
+                    text: 'Chrulex updated! v' + manifestData.version
+                }).appendTo(document.querySelector('.' + Ruller.overlaySelector));
 
-        setOverlaySize();
-        hookMouseEvents();
-        run();
-        bindUnload();
+                setTimeout(() => {
+                    updateMessage.remove();
+                }, 3000);
+            }
+        });
     }
 
     function hookMouseEvents() {
@@ -149,9 +176,10 @@
         this.forceStay = e.ctrlKey;
 
         this.wrapper = $('<div/>', { class: Ruller.wrapper, css: { 'border-color': options.colorFantomResize } }).appendTo(Ruller.overlay);
-        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id, tabindex: 0, css: { background: options.colorSelection } }).appendTo(this.wrapper);
+        this.selection = $('<div/>', { class: Ruller.main, 'data-id': this.id, tabindex: 0 }).appendTo(this.wrapper);
         this.heightLabel = $('<span/>', { class: Ruller.height, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.selection);
         this.widthLabel = $('<span/>', { class: Ruller.width, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.selection);
+        this.selectionBack = $('<div/>', { class: Ruller.selection, css: { background: options.colorSelection, opacity: options.opacitySelection / 100 } }).appendTo(this.selection);
 
         this.rotateWraper = $('<div/>', { class: Ruller.rotate }).appendTo(this.selection);
         this.rotateLabel = $('<div/>', { class: Ruller.rotateLabel, css: { color: options.colorUnit, 'font-size': options.sizeUnit + 'px' } }).appendTo(this.rotateWraper);
@@ -288,7 +316,7 @@
 
                 clearTimeout(Global.rullerList[this.id].timeout);
                 Global.rullerList[this.id].timeout = 0;
-            }, 100);
+            }, 150);
         }
     }
 
@@ -306,6 +334,16 @@
             this.bottomLine.css('border-color', options.colorGridLine);
             this.leftLine.css('border-color', options.colorGridLine);
         }
+    }
+
+    function addFloatMenu() {
+        Ruller.menu = $('<div/>', { class: Ruller.floatMenu }).appendTo(Ruller.overlay);
+        var text = $('<label/>', { text: 'Theme' }).appendTo(Ruller.menu);
+
+        ['midnight', 'before dawn', 'sunrise', 'morning', 'noon', 'sunfade', 'nightfall', 'dusk']
+        .forEach((item) => $('<span/>', { class: item, text: item }).appendTo(Ruller.menu));
+
+        menu.appendTo(Ruller.menu);
     }
 
     if (chrome.extension) {

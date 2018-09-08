@@ -1,10 +1,11 @@
 .chrome-ruller-overlay{
-	@color-selection: #c5f78c;
+	@color-selection: #90ff84;
 	@color-rotate-label: white;
 	@color-value-label: white;
 	@color-rotate-wrapper: #d3d3d3;
 	@color-line: #00ffff;
 	@color-line-focus: white;
+	@color-rotate-fantom: #d3d3d3;
 	@font-info: 16px;
 	@font-units: 20px;
 
@@ -17,6 +18,7 @@
 	direction: ltr;
 	margin: 0;
 	padding: 0;
+	border-radius: 0;
 
 	& *{
 		margin: 0;
@@ -40,12 +42,18 @@
 		.ruller{
 			height: 100%;
 			width: 100%;
-			opacity: 0.5;
 			z-index: 1;
 			position: relative;
 			cursor: pointer;
 			border-radius: 0;
-			background: @color-selection;
+
+			.selection{
+				height: 100%;
+				width: 100%;
+				opacity: 0.5;
+				background: @color-selection;
+			}
+
 			&:focus{
 				outline: none;
 				.line{
@@ -159,10 +167,35 @@
 		}
 
 		&.rotated{
-			border: 1px dashed white;
+			border: 1px dashed @color-rotate-fantom;
 			.rotate .rotateLabel{
 				display: block;
 			}
+		}
+	}
+
+	.menu{
+		background: rgba(0,0,0,0.4);
+		padding: 10px;
+		top: 10px;
+		right: 10px;
+		box-shadow: 0 0 30px 5px white;
+		position: fixed;
+		border-radius: 5px;
+		width: 250px;
+		text-align: center;
+
+
+		label{
+			display: block;
+		}
+
+		span{
+			cursor: pointer;
+			width: ~"calc(50% - 20px)";
+			display: inline-block;
+			padding: 10px;
+			white-space: nowrap;
 		}
 	}
 }

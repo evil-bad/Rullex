@@ -8,6 +8,7 @@
   direction: ltr;
   margin: 0;
   padding: 0;
+  border-radius: 0;
 }
 .chrome-ruller-overlay * {
   margin: 0;
@@ -28,12 +29,16 @@
 .chrome-ruller-overlay .wrapper .ruller {
   height: 100%;
   width: 100%;
-  opacity: 0.5;
   z-index: 1;
   position: relative;
   cursor: pointer;
   border-radius: 0;
-  background: #c5f78c;
+}
+.chrome-ruller-overlay .wrapper .ruller .selection {
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  background: #90ff84;
 }
 .chrome-ruller-overlay .wrapper .ruller:focus {
   outline: none;
@@ -136,8 +141,29 @@
   text-align: center;
 }
 .chrome-ruller-overlay .wrapper.rotated {
-  border: 1px dashed white;
+  border: 1px dashed #d3d3d3;
 }
 .chrome-ruller-overlay .wrapper.rotated .rotate .rotateLabel {
   display: block;
+}
+.chrome-ruller-overlay .menu {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  top: 10px;
+  right: 10px;
+  box-shadow: 0 0 30px 5px white;
+  position: fixed;
+  border-radius: 5px;
+  width: 250px;
+  text-align: center;
+}
+.chrome-ruller-overlay .menu label {
+  display: block;
+}
+.chrome-ruller-overlay .menu span {
+  cursor: pointer;
+  width: calc(50% - 20px);
+  display: inline-block;
+  padding: 10px;
+  white-space: nowrap;
 }

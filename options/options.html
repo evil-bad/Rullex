@@ -10,45 +10,75 @@
 
     <section>
         <label>
-            <span style="color: #c5f78c">Selection color</span>
-            <input type="color" value="#c5f78c" id="colorSelection" />
+            <span>Overlay opacity</span>
+            <input type="number" value="40" id="opacityOverlay" max="90" min="10" />
         </label>
-
+        <br />
+        <label>
+            <span>Selection opacity</span>
+            <input type="number" value="50" id="opacitySelection" max="90" min="10" />
+        </label>
+        <br />
+        <label>
+            <span style="color: #90ff84">Selection color</span>
+            <input type="color" value="#90ff84" id="colorSelection" />
+        </label>
+        <br />
         <label>
             <span style="color: white">Grid line active color</span>
             <input type="color" value="#ffffff" id="colorGridLineActive" />
         </label>
-
+        <br />
         <label>
             <span style="color: cyan">Grid line color</span>
             <input type="color" value="#00ffff" id="colorGridLine" />
         </label>
-
+        <br />
+        <label>
+            <dropdown-container>
+                <span>Theme</span>
+                <dropdown-wrapper>
+                    <input type="text" id="theme" readonly value="morning"/>
+                    <ul>
+                        <li>midnight</li>
+                        <li>dawn</li>
+                        <li>sunrise</li>
+                        <li>morning</li>
+                        <li>noon</li>
+                        <li>sunfade</li>
+                        <li>nightfall</li>
+                        <li>dusk</li>
+                        <li>custom</li>
+                    </ul>
+                </dropdown-wrapper>
+            </dropdown-container>
+        </label>
+        <br />
         <label>
             <span style="color: white">Unit color</span>
             <input type="color" value="#ffffff" id="colorUnit" />
         </label>
-
+        <br />
         <label>
             <span style="color: black">Distance color</span>
             <input type="color" value="#000000" id="colorDistance" />
         </label>
-
+        <br />
         <label>
             <span style="color: #d3d3d3">Fantom resize color</span>
             <input type="color" value="#d3d3d3" id="colorFantomResize" />
         </label>
-
+        <br />
         <label>
             <span>Unit font size</span>
             <input type="number" value="20" max="99" min="1" id="sizeUnit" />
         </label>
-
+        <br />
         <label>
             <span>Distanse font size</span>
             <input type="number" value="16" max="99" min="1" id="sizeDistance" />
         </label>
-
+        <br />
         <input type="button" id="save" value="SAVE" />
     </section>
 </body>

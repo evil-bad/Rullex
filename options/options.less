@@ -4,7 +4,7 @@ body{
 	@input-number-back: lightblue;
 	@save-back :darkblue;
 	@font-size-min: 10px;
-	@font-size-main: ~"calc(2vw + @{font-size-min})";
+	@font-size-main: ~"calc(1.5vw + @{font-size-min})";
 	@font-size-number: ~"calc(1.5vw + @{font-size-min})";
 
 	background: @background;
@@ -13,12 +13,15 @@ body{
 		text-align: center;
 		font-size: @font-size-main;
 		color: @text;
+		user-select: none;
 
 		label{
-			margin: 1vw;
-			display: block;
 			cursor: pointer;
-			span{
+			margin-bottom: 0.5vw;
+			display: inline-block;
+			user-select: none;
+
+			span, input[type=text]{
 				text-shadow: 0 0px 15px @text;
 				transition: text-shadow 0.1s linear;
 			}
@@ -52,6 +55,73 @@ body{
     			margin: 0; 
 			}
 		}
+		input[type=checkbox]{
+			height: ~"calc(1.9vw + @{font-size-min})";
+			width: ~"calc(1.9vw + @{font-size-min})";
+			vertical-align: bottom;
+		}
+
+		input[type=text]{
+			background: @background;
+			color: @text;
+			font-size: @font-size-main;
+			text-align: center;
+		}
+
+		dropdown-container{
+			display: inline-block;
+			margin-top: 0.5vw;
+
+			dropdown-wrapper{
+				position: relative;
+				input, li{
+					border: 1px solid @text;
+					padding: 0.5vw 1vw;
+					border-radius: 10px;
+					width: 20vw;
+					min-width: 200px;
+					max-width: 500px;
+					display: inline-block;
+				}
+				
+				ul{
+					position: absolute;
+					background: @background;
+					border:1px solid;
+					border-radius: 10px;
+					list-style: none;
+					padding: 0;
+					margin: 0;
+					right: 0;
+					top: -1vw;
+					transform: translateY(0);
+					transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, top 0.1s ease-in-out, max-height 0.2s ease-in-out;
+					max-height: 6vw;
+					overflow: hidden;
+					opacity: 0;
+					&.opened{
+						top: ~"calc(-50% + 4.5vw)";
+						transform: translateY(-50%);
+						max-height: 65vw;
+						transition: transform 0.1s ease-in-out, top 0.1s ease-in-out, max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+						opacity: 1;
+						li{
+							text-shadow: 0 0px 15px @text;
+							transition: text-shadow 0.1s linear;
+							color: @text;
+						}
+					}
+					li{
+						border: none;
+						color: @background;
+						&:hover{
+							text-shadow: 0 0px 35px @text;
+						}
+					}
+				}
+			}
+		}
+
 
 		#save{
 			border-radius: 0.5vw;
@@ -59,7 +129,7 @@ body{
 			font-size: @font-size-main;
 			background: @save-back;
 			color: @text;
-			margin: 4vw 0;
+			margin: 3vw 0 1vw;
 			cursor: pointer;
 			box-shadow: 0 0 15px @text;
 			transition: box-shadow 50ms ease-in-out;
