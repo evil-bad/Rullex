@@ -11,7 +11,9 @@ let OptionTarget = {
     sizeDistance: { min: 1, max: 99 },
     opacityOverlay: { min: 10, max: 90 },
     opacitySelection: { min: 10, max: 90 },
-    theme: ''
+    theme: '',
+    unit: '',
+    screenWidth: { min: 10, max: 99 }
 };
 
 let Theme = {
@@ -145,7 +147,7 @@ function setOption(items) {
                 else
                     document.getElementById(input).value = items[input];
 
-                input_change(input, items[input], true);
+                input_change(input, items[input]);
             }
         }
     }
@@ -162,14 +164,14 @@ function restore_options() {
     });
 }
 
-function input_change(id, value, fromTheme) {
+function input_change(id, value) {
     let input = this;
     if (typeof(id) === 'string') input = document.getElementById(id);
 
     if (input.type === 'color')
         input.previousElementSibling.style.color = value || this.value;
 
-    if (!fromTheme)
+    if (!input.hasAttribute('no-theme'))
         document.getElementById('theme').value = 'custom';
 }
 
@@ -182,33 +184,36 @@ function dropdown_select(e) {
     if (parent.classList.contains('opened')) {
         parent.previousElementSibling.value = item.textContent;
         apply_theme(item.textContent);
-        theme_close();
+        dd_close();
     } else {
-        theme_open();
+        dd_open(parent);
     }
 }
 
-function theme_close(e) {
-    document.querySelector('dropdown-container ul').classList.remove('opened');
+function dd_close() {
+    document.querySelectorAll('dropdown-container ul').forEach((dd) => dd.classList.remove('opened'));
 }
 
-function theme_open(e) {
-    document.querySelector('dropdown-container ul').classList.add('opened');
+function dd_open(parent) {
+    parent.classList.add('opened');
 }
 
 function key_handler(e) {
-    if (e.keyCode === 27) theme_close();
+    if (e.keyCode === 27) dd_close();
 }
 
 function global_click(e) {
-    if (e.target.tagName !== 'LI' && e.target.id !== 'theme') theme_close();
+    if (e.target.tagName !== 'LI' && e.target.parentElement.tagName !== 'DROPDOWN-WRAPPER') dd_close();
 }
 
 function apply_theme(theme) {
     if (theme === 'custom') {
         setOption(Option.custom);
     } else {
-        Theme[theme].forEach((control) => {
+        var theme = Theme[theme];
+        if (!theme) return;
+
+        theme.forEach((control) => {
             document.getElementById(control.id).value = control.value;
             input_change(control.id, control.value, true);
         });

@@ -55,6 +55,7 @@
     };
 
     let options = {};
+    let unitMultiplier = 1;
 
     function init() {
         count = 0;
@@ -76,6 +77,7 @@
             hookMouseEvents();
             run();
             bindUnload();
+            calculateMultiplier();
             showUpdateMessage();
         });
     }
@@ -222,9 +224,10 @@
         this.wrapper.resize(e => self.setLabelValues(e));
     };
 
-    ChromeRuller.prototype.setLabelValues = function(e) {
-        this.heightLabel.html(this.selection.height());
-        this.widthLabel.html(this.selection.width());
+    ChromeRuller.prototype.setLabelValues = function() {
+        this.heightLabel.html(convertUnit(this.selection.height(), true));
+        this.widthLabel.html(convertUnit(this.selection.width()));
+        console.log(this.selection.height())
     };
 
     ChromeRuller.prototype.drow = function(e) {
@@ -236,8 +239,7 @@
         let x3 = Math.min(this.startX, this.endX);
         this.height = y4 - y3;
         this.width = x4 - x3;
-        this.heightLabel.html(this.height);
-        this.widthLabel.html(this.width);
+        this.setLabelValues();
         this.wrapper.css({ left: x3, top: y3, width: this.width, height: this.height });
     };
 
@@ -306,10 +308,10 @@
 
 
             let offset = this.wrapper.offset();
-            this.infoTop.html(offset.top);
-            this.infoRight.html(window.innerWidth - offset.left - this.width);
-            this.infoBottom.html(window.innerHeight - offset.top - this.height);
-            this.infoLeft.html(offset.left);
+            this.infoTop.html(convertUnit(offset.top, true));
+            this.infoRight.html(convertUnit(window.innerWidth - offset.left - this.width));
+            this.infoBottom.html(convertUnit(window.innerHeight - offset.top - this.height, true));
+            this.infoLeft.html(convertUnit(offset.left));
 
             Global.rullerList[this.id].timeout = setTimeout(() => {
                 if (!Global.rullerList[this.id]) return;
@@ -334,6 +336,54 @@
             this.bottomLine.css('border-color', options.colorGridLine);
             this.leftLine.css('border-color', options.colorGridLine);
         }
+    }
+
+    function calculateMultiplier() {
+        let pxInCm = screen.availWidth / (options.screenWidth || 38);
+        let pxInIn = pxInCm / 0.393700787;
+        let pxInPt = pxInIn / 72;
+        let pxInPc = pxInPt * 12;
+
+        switch (options.unit) {
+            case 'in':
+                unitMultiplier /= pxInIn;
+                break;
+            case 'pt':
+                unitMultiplier /= pxInPt;
+                break;
+            case 'pc':
+                unitMultiplier /= pxInPc;
+                break;
+        }
+    }
+
+    function convertUnit(unit, height) {
+        let convertValue = 100;
+
+        switch (options.unit) {
+            case 'px':
+                break;
+            case '%':
+                if (height)
+                    convertValue = Math.max(document.documentElement.offsetHeight, window.innerHeight);
+                else
+                    convertValue = document.documentElement.clientWidth;
+                break;
+            case 'vw':
+                convertValue = window.innerWidth;
+                break;
+            case 'vh':
+                convertValue = window.innerHeight;
+                break;
+            case 'vw/vh':
+                if (height)
+                    convertValue = window.innerHeight;
+                else
+                    convertValue = window.innerWidth;
+                break;
+        }
+
+        return Math.round(unit *= 100 / convertValue * unitMultiplier * 100) / 100;
     }
 
     function addFloatMenu() {
