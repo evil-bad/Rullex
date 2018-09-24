@@ -38,7 +38,7 @@
             <dropdown-container>
                 <span>Theme</span>
                 <dropdown-wrapper>
-                    <input type="text" id="theme" readonly value="morning"/>
+                    <input type="text" id="theme" readonly value="morning" no-theme/>
                     <ul>
                         <li>midnight</li>
                         <li>dawn</li>
@@ -52,6 +52,30 @@
                     </ul>
                 </dropdown-wrapper>
             </dropdown-container>
+        </label>
+        <br />
+        <label>
+            <dropdown-container>
+                <span>Unit*</span>
+                <dropdown-wrapper>
+                    <input type="text" id="unit" readonly value="px" no-theme/>
+                    <ul>
+                        <li>px</li>
+                        <li>%</li>
+                        <li>vw</li>
+                        <li>vh</li>
+                        <li>vw/vh</li>
+                        <li>in</li>
+                        <li>pt</li>
+                        <li>pc</li>
+                    </ul>
+                </dropdown-wrapper>
+            </dropdown-container>
+        </label>
+        <br />
+        <label>
+            <span>Screen width*</span>
+            <input type="number" min="10" max="99" value="38" id="screenWidth" no-theme />
         </label>
         <br />
         <label>
@@ -80,6 +104,11 @@
         </label>
         <br />
         <input type="button" id="save" value="SAVE" />
+        <br />
+        <br />
+        <unit-disclaimer>
+            * IMPORTANT. In case of using in, pt or pc units You should to measure you physical screen width (not diagonal) in cm with maximum accuracy
+        </unit-disclaimer>
     </section>
 </body>
 

@@ -25,6 +25,15 @@ body section label:hover input[type=number] {
   background: lightblue;
   color: white;
 }
+body section label.disabled {
+  pointer-events: none;
+}
+body section label.disabled span {
+  color: lightgray;
+}
+body section label.disabled input {
+  background: lightgray;
+}
 body section input {
   outline: none !important;
 }
@@ -94,6 +103,7 @@ body section dropdown-container dropdown-wrapper ul.opened {
   max-height: 65vw;
   transition: transform 0.1s ease-in-out, top 0.1s ease-in-out, max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   opacity: 1;
+  z-index: 10;
 }
 body section dropdown-container dropdown-wrapper ul.opened li {
   text-shadow: 0 0px 15px white;
@@ -133,4 +143,7 @@ body section #save:hover {
   to {
     background-position: bottom left;
   }
+}
+body section unit-disclaimer {
+  font-size: calc(1vw + 10px / 2);
 }

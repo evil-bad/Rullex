@@ -4,7 +4,7 @@
     "name": "Ruler Measurement",
     "short_name": "Chrullex",
     "description": "Make you measurement easy with Chrullex (CH-rome RUL-er EX-tension)",
-    "version": "2.2.5",
+    "version": "2.2.6",
     "offline_enabled": true,
     "options_page": "options/options.html",
     "page_action": {

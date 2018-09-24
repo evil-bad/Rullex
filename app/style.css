@@ -60,8 +60,9 @@
   transform: translateX(50%);
 }
 .chrome-ruller-overlay .wrapper .value.height {
-  left: -30px;
+  left: -40px;
   top: 50%;
+  min-width: 60px;
   transform: translateY(-50%) rotateZ(-90deg);
 }
 .chrome-ruller-overlay .wrapper .line {
