@@ -42,7 +42,8 @@
         keyup: 'keyup.ruller',
         resize: 'resize.ruller',
         mouseenter: 'mouseenter.ruller',
-        mouseleave: 'mouseleave.ruller'
+        mouseleave: 'mouseleave.ruller',
+        toggleInfo: 'toggleinfo.ruller'
     };
 
     let state = {
@@ -139,7 +140,13 @@
     function bindUnload() {
         Global.window.on(event.keypress, function(e) {
             if (e.keyCode === 17) unload();
+            else if (e.keyCode === 9) toggleInfo();
         });
+    }
+
+    function toggleInfo() {
+        options.showInfo = !options.showInfo;
+        Global.window.trigger(event.toggleInfo);
     }
 
     function unload(forse) {
@@ -154,6 +161,7 @@
             Global.window.off(event.mousedown);
             Global.window.off(event.keypress);
             Global.window.off(event.resize);
+            Global.window.off(event.toggleInfo);
         }
     }
 
@@ -197,7 +205,7 @@
         this.infoBottom = $('<div/>', { class: Ruller.infoBottom, css: { color: options.colorDistance } }).appendTo(this.info);
         this.infoLeft = $('<div/>', { class: Ruller.infoLeft, css: { color: options.colorDistance } }).appendTo(this.info);
 
-        this.wrapper.draggable();
+        this.wrapper.draggable({ drag: this.setInfo.bind(this) });
         this.wrapper.resizable({ handles: 'n,w,s,e,se' });
 
         this.resize();
@@ -207,6 +215,7 @@
         Global.window.on(event.create + Global.dot + this.id, this.checkForStay.bind(this));
         Global.window.on(event.remove + Global.dot + this.id, this.remove.bind(this));
         Global.window.on(event.keydown + Global.dot + this.id, this.bindPressListeners.bind(this));
+        Global.window.on(event.toggleInfo, this.setInfo.bind(this));
         this.selection.on(event.mouseenter + Global.dot + this.id, this.toggleFocus.bind(this, true));
         this.selection.on(event.mouseleave + Global.dot + this.id, this.toggleFocus.bind(this, false));
     };
@@ -221,13 +230,29 @@
 
     ChromeRuller.prototype.resize = function(e) {
         let self = this;
-        this.wrapper.resize(e => self.setLabelValues(e));
+        this.wrapper.resize(e => {
+            self.setLabelValues(e);
+            self.setInfo();
+        });
     };
 
     ChromeRuller.prototype.setLabelValues = function() {
         this.heightLabel.html(convertUnit(this.selection.height(), true));
         this.widthLabel.html(convertUnit(this.selection.width()));
-        console.log(this.selection.height())
+    };
+
+    ChromeRuller.prototype.setInfo = function() {
+        if (!options.showInfo) {
+            this.info.hide();
+            return;
+        };
+
+        this.info.show();
+        let offset = this.wrapper.offset();
+        this.infoTop.html(convertUnit(offset.top, true));
+        this.infoRight.html(convertUnit(window.innerWidth - offset.left - this.wrapper.width()));
+        this.infoBottom.html(convertUnit(window.innerHeight - offset.top - this.wrapper.height(), true));
+        this.infoLeft.html(convertUnit(offset.left));
     };
 
     ChromeRuller.prototype.drow = function(e) {
@@ -241,6 +266,7 @@
         this.width = x4 - x3;
         this.setLabelValues();
         this.wrapper.css({ left: x3, top: y3, width: this.width, height: this.height });
+        this.setInfo();
     };
 
     ChromeRuller.prototype.fix = function(e) {
@@ -265,8 +291,7 @@
 
     ChromeRuller.prototype.bindPressListeners = function(event) {
         this.rotate(event);
-        this.showInfo(event);
-    }
+    };
 
     ChromeRuller.prototype.rotate = function(event) {
         if (event.target.dataset.id != this.id) return;
@@ -289,38 +314,7 @@
             if (label) this.wrapper.addClass(Ruller.rotated);
             else this.wrapper.removeClass(Ruller.rotated);
         }
-    }
-
-    ChromeRuller.prototype.showInfo = function(e) {
-        if (e.ctrlKey && this.wrapper.is(state.hover)) {
-            this.info.show();
-            if (Global.rullerList[this.id].timeout) return;
-
-            if (!Global.rullerList[this.id].ctrlPressed) {
-                Global.rullerList[this.id].ctrlPressed = true;
-                Global.window.off(event.keyup + Global.dot + this.id).on(event.keyup + Global.dot + this.id, (e) => {
-                    if (!Global.rullerList[this.id]) return;
-
-                    Global.rullerList[this.id].ctrlPressed = false;
-                    this.info.hide();
-                });
-            }
-
-
-            let offset = this.wrapper.offset();
-            this.infoTop.html(convertUnit(offset.top, true));
-            this.infoRight.html(convertUnit(window.innerWidth - offset.left - this.width));
-            this.infoBottom.html(convertUnit(window.innerHeight - offset.top - this.height, true));
-            this.infoLeft.html(convertUnit(offset.left));
-
-            Global.rullerList[this.id].timeout = setTimeout(() => {
-                if (!Global.rullerList[this.id]) return;
-
-                clearTimeout(Global.rullerList[this.id].timeout);
-                Global.rullerList[this.id].timeout = 0;
-            }, 150);
-        }
-    }
+    };
 
     ChromeRuller.prototype.toggleFocus = function(activate) {
         if (activate) {
@@ -336,7 +330,7 @@
             this.bottomLine.css('border-color', options.colorGridLine);
             this.leftLine.css('border-color', options.colorGridLine);
         }
-    }
+    };
 
     function calculateMultiplier() {
         let pxInCm = screen.availWidth / (options.screenWidth || 38);
@@ -355,7 +349,7 @@
                 unitMultiplier /= pxInPc;
                 break;
         }
-    }
+    };
 
     function convertUnit(unit, height) {
         let convertValue = 100;
@@ -384,7 +378,7 @@
         }
 
         return Math.round(unit *= 100 / convertValue * unitMultiplier * 100) / 100;
-    }
+    };
 
     function addFloatMenu() {
         Ruller.menu = $('<div/>', { class: Ruller.floatMenu }).appendTo(Ruller.overlay);
@@ -394,7 +388,7 @@
         .forEach((item) => $('<span/>', { class: item, text: item }).appendTo(Ruller.menu));
 
         menu.appendTo(Ruller.menu);
-    }
+    };
 
     if (chrome.extension) {
         chrome.extension.onRequest.addListener(function(request) {
@@ -411,7 +405,7 @@
                     return console.log(request);
             }
         });
-    }
+    };
 
 
 }(jQueryChromeRuller));
