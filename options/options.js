@@ -147,7 +147,7 @@ function setOption(items) {
                 else
                     document.getElementById(input).value = items[input];
 
-                input_change(input, items[input]);
+                input_change(input, items[input], true);
             }
         }
     }
@@ -164,14 +164,14 @@ function restore_options() {
     });
 }
 
-function input_change(id, value) {
+function input_change(id, value, fromTheme) {
     let input = this;
     if (typeof(id) === 'string') input = document.getElementById(id);
 
     if (input.type === 'color')
         input.previousElementSibling.style.color = value || this.value;
 
-    if (!input.hasAttribute('no-theme'))
+    if (!fromTheme)
         document.getElementById('theme').value = 'custom';
 }
 
