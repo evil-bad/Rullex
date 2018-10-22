@@ -10,25 +10,24 @@
 
     let Ruller = {
         overlaySelector: 'chrome-ruller-overlay',
-        wrapper: 'wrapper',
-        main: 'ruller',
-        selection: 'selection',
-        width: 'value width',
-        height: 'value height',
-        topLine: 'line top',
-        rightLine: 'line right',
-        bottomLine: 'line bottom',
-        leftLine: 'line left',
-        resizable: 'resizable',
-        rotate: 'rotate',
-        rotateLabel: 'rotateLabel',
-        rotated: 'rotated',
-        info: 'info',
-        infoTop: 'info-top',
-        infoRight: 'info-right',
-        infoBottom: 'info-bottom',
-        infoLeft: 'info-left',
-        floatMenu: 'menu'
+        wrapper: 'cr-wrapper',
+        main: 'cr-ruller',
+        selection: 'cr-selection',
+        width: 'cr-value cr-width',
+        height: 'cr-value cr-height',
+        topLine: 'cr-line cr-top',
+        rightLine: 'cr-line cr-right',
+        bottomLine: 'cr-line cr-bottom',
+        leftLine: 'cr-line cr-left',
+        rotate: 'cr-rotate',
+        rotateLabel: 'cr-rotateLabel',
+        rotated: 'cr-rotated',
+        info: 'cr-info',
+        infoTop: 'cr-info-top',
+        infoRight: 'cr-info-right',
+        infoBottom: 'cr-info-bottom',
+        infoLeft: 'cr-info-left',
+        floatMenu: 'cr-menu'
     };
 
     let event = {
