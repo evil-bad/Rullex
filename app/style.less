@@ -35,11 +35,11 @@
 		border-radius: 0;
 	}
 
-	.wrapper{
+	.cr-wrapper{
 		background-color: transparent;
 		position: absolute;
 		
-		.ruller{
+		.cr-ruller{
 			height: 100%;
 			width: 100%;
 			z-index: 1;
@@ -47,7 +47,7 @@
 			cursor: pointer;
 			border-radius: 0;
 
-			.selection{
+			.cr-selection{
 				height: 100%;
 				width: 100%;
 				opacity: 0.5;
@@ -56,13 +56,13 @@
 
 			&:focus{
 				outline: none;
-				.line{
+				.cr-line{
 					border-color: @color-line-focus;
 				}
 			}
 		}
 
-		.value{
+		.cr-value{
 			color: @color-value-label;
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: @font-units;
@@ -70,12 +70,12 @@
 			-webkit-touch-callout: none;
 			user-select: none;
 	
-			&.width{
+			&.cr-width{
 				top: -27px;
 				right: 50%;
 				transform: translateX(50%);
 			}
-			&.height{
+			&.cr-height{
 				left: -40px;
 				top: 50%;
 				min-width: 60px;
@@ -83,35 +83,35 @@
 			}
 		}
 		
-		.line{
+		.cr-line{
 			position: absolute;
 			border-top: 1px dashed @color-line;
 			border-right: 1px dashed @color-line;
 			z-index: 0;
 			background-color: none;
 
-			&.top{
+			&.cr-top{
 				height: 1px;
 				top: -1px;
 				right: 50%;
 				transform: translateX(50%);
 			}
 
-			&.right{
+			&.cr-right{
 				width: 1px;
 				right: -1px;
 				top: 50%;
 				transform: translateY(-50%);
 			}
 
-			&.bottom{
+			&.cr-bottom{
 				height: 1px;
 				bottom: -1px;
 				right: 50%;
 				transform: translateX(50%);
 			}
 
-			&.left{
+			&.cr-left{
 				width: 1px;
 				left: -1px;
 				top: 50%;
@@ -119,14 +119,14 @@
 			}
 		}
 
-		.rotate{
+		.cr-rotate{
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			color: @color-rotate-label;
 			font-size: @font-units;
-			.rotateLabel{
+			.cr-rotateLabel{
 				display: none;
 				&:after{
 					content: '°';
@@ -134,7 +134,7 @@
 			}
 		}
 
-		.info{
+		.cr-info{
 			@margin: 10px;
 			position: absolute;
 			top: 0;
@@ -149,33 +149,33 @@
 				user-select: none;
 				position: absolute;
 			}
-			.info-left{
+			.cr-info-left{
 				left: @margin;
 			}
-			.info-top{
+			.cr-info-top{
 				top: @margin;
 				width: 100%;
 				text-align: center;
 			}
-			.info-right{
+			.cr-info-right{
 				right: @margin;
 			}
-			.info-bottom{
+			.cr-info-bottom{
 				bottom: @margin;
 				width: 100%;
 				text-align: center;
 			}
 		}
 
-		&.rotated{
+		&.cr-rotated{
 			border: 1px dashed @color-rotate-fantom;
-			.rotate .rotateLabel{
+			.cr-rotate .cr-rotateLabel{
 				display: block;
 			}
 		}
 	}
 
-	.menu{
+	.cr-menu{
 		background: rgba(0,0,0,0.4);
 		padding: 10px;
 		top: 10px;
