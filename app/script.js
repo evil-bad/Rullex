@@ -250,7 +250,7 @@
         let offset = this.wrapper.offset();
         this.infoTop.html(convertUnit(offset.top, true));
         this.infoRight.html(convertUnit(window.innerWidth - offset.left - this.wrapper.width()));
-        this.infoBottom.html(convertUnit(window.innerHeight - offset.top - this.wrapper.height(), true));
+        this.infoBottom.html(convertUnit(Math.max(window.innerHeight, document.body.clientHeight) - offset.top - this.wrapper.height(), true));
         this.infoLeft.html(convertUnit(offset.left));
     };
 

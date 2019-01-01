@@ -57,6 +57,7 @@ body section input[type=checkbox] {
   height: calc(1.9vw + 10px);
   width: calc(1.9vw + 10px);
   vertical-align: bottom;
+  cursor: pointer;
 }
 body section input[type=text] {
   background: darkslateblue;

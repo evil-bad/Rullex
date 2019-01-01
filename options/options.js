@@ -5,6 +5,7 @@ let OptionTarget = {
     colorGridLine: '',
     colorGridLineActive: '',
     colorUnit: '',
+    showInfo: {checkbox: true, notheme: true},
     colorDistance: '',
     colorFantomResize: '',
     sizeUnit: { min: 1, max: 99 },
@@ -141,7 +142,7 @@ function setOption(items) {
 
     for (const input in OptionTarget) {
         if (OptionTarget.hasOwnProperty(input)) {
-            if (items[input]) {
+            if (items[input] || items[input] === false) {
                 if (OptionTarget[input].checkbox)
                     document.getElementById(input).checked = items[input];
                 else
@@ -167,6 +168,9 @@ function restore_options() {
 function input_change(id, value, fromTheme) {
     let input = this;
     if (typeof(id) === 'string') input = document.getElementById(id);
+
+    if(OptionTarget[input.id] && OptionTarget[input.id].notheme)
+        return;
 
     if (input.type === 'color')
         input.previousElementSibling.style.color = value || this.value;
