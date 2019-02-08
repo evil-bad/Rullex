@@ -18,7 +18,7 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 
 class RullerLoader {
     constructor(tab) {
-        this.enable = false;
+        this.enabled = false;
         this.loaded = false;
         this.tab = tab;
         this.icon = {
